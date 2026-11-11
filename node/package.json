@@ -1,0 +1,43 @@
+{
+  "name": "@getclickfix/node",
+  "version": "0.2.0",
+  "description": "ClickFix public API client for Node.js 22+: typed requests, bounded retries, pagination, webhook signature verification and widget identity hashes.",
+  "keywords": [
+    "clickfix",
+    "customer-support",
+    "api-client",
+    "webhooks"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ClickSolveMainTR/clickfix-app-go.git",
+    "directory": "sdks/node"
+  },
+  "homepage": "https://getclickfix.com/docs/integration-guide",
+  "bugs": {
+    "url": "https://github.com/ClickSolveMainTR/clickfix-app-go/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": false
+  },
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "prepack": "node ../scripts/prepack.mjs node"
+  }
+}

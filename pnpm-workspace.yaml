@@ -1,0 +1,5 @@
+packages:
+  - node
+  - visitor-core
+  - react-widget
+  - examples/node

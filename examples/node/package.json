@@ -1,0 +1,9 @@
+{
+  "name": "clickfix-guide-examples",
+  "private": true,
+  "type": "module",
+  "description": "Code samples of the integration guide; run by sdks/examples/run.mjs.",
+  "dependencies": {
+    "@getclickfix/node": "workspace:*"
+  }
+}

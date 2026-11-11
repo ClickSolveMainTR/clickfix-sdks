@@ -1,0 +1,79 @@
+{
+  "name": "clickfix/laravel",
+  "description": "ClickFix for Laravel 10, 11, 12 and 13: service provider, ClickFix facade, artisan commands, signed webhook route with one Laravel event per ClickFix event, and the @clickfixWidget Blade directive.",
+  "type": "library",
+  "license": "MIT",
+  "keywords": [
+    "clickfix",
+    "laravel",
+    "customer-support",
+    "webhooks",
+    "widget"
+  ],
+  "homepage": "https://github.com/ClickSolveMainTR/clickfix-laravel",
+  "support": {
+    "issues": "https://github.com/ClickSolveMainTR/clickfix-laravel/issues",
+    "source": "https://github.com/ClickSolveMainTR/clickfix-laravel",
+    "docs": "https://getclickfix.com/docs/integration-guide#laravel"
+  },
+  "require": {
+    "php": "^8.1",
+    "clickfix/sdk": "^0.1",
+    "guzzlehttp/guzzle": "^7.8",
+    "illuminate/bus": "^10.0 || ^11.0 || ^12.0 || ^13.0",
+    "illuminate/console": "^10.0 || ^11.0 || ^12.0 || ^13.0",
+    "illuminate/contracts": "^10.0 || ^11.0 || ^12.0 || ^13.0",
+    "illuminate/database": "^10.0 || ^11.0 || ^12.0 || ^13.0",
+    "illuminate/http": "^10.0 || ^11.0 || ^12.0 || ^13.0",
+    "illuminate/queue": "^10.0 || ^11.0 || ^12.0 || ^13.0",
+    "illuminate/routing": "^10.0 || ^11.0 || ^12.0 || ^13.0",
+    "illuminate/support": "^10.0 || ^11.0 || ^12.0 || ^13.0",
+    "illuminate/view": "^10.0 || ^11.0 || ^12.0 || ^13.0"
+  },
+  "require-dev": {
+    "orchestra/testbench": "^8.0 || ^9.0 || ^10.0 || ^11.0",
+    "phpunit/phpunit": "^10.1 || ^11.0 || ^12.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "ClickFix\\Laravel\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "ClickFix\\Laravel\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "ClickFix\\Laravel\\ClickFixServiceProvider"
+      ],
+      "aliases": {
+        "ClickFix": "ClickFix\\Laravel\\Facades\\ClickFix"
+      }
+    }
+  },
+  "repositories": [
+    {
+      "type": "path",
+      "url": "../php",
+      "options": {
+        "versions": {
+          "clickfix/sdk": "0.1.0"
+        }
+      }
+    }
+  ],
+  "scripts": {
+    "test": "phpunit"
+  },
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "php-http/discovery": true
+    }
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}

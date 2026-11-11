@@ -1,0 +1,30 @@
+name: clickfix_webview
+description: >-
+  Secure ClickFix support webview for Flutter: loads the hosted widget page and
+  implements the ClickFix webview bridge contract v1 (identify, track, open,
+  deep links, consent, reset) over a JavaScript channel.
+version: 0.1.0
+repository: https://github.com/ClickSolveMainTR/clickfix-app-go/tree/main/sdks/flutter/clickfix_webview
+issue_tracker: https://github.com/ClickSolveMainTR/clickfix-app-go/issues
+documentation: https://getclickfix.com/docs/integration-guide
+topics:
+  - clickfix
+  - support
+  - webview
+  - chat
+
+environment:
+  sdk: ^3.10.0
+  flutter: ">=3.38.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  webview_flutter: ^4.14.1
+  webview_flutter_android: ^4.14.1
+  webview_flutter_platform_interface: ^2.15.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0

@@ -1,0 +1,24 @@
+{
+  "name": "clickfix-sdks",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate": "node scripts/generate.mjs",
+    "check": "node scripts/generate.mjs --check",
+    "build": "tsc -p visitor-core && cp visitor-core/src/schema.d.ts visitor-core/dist/schema.d.ts && tsc -p node && cp node/src/schema.d.ts node/dist/schema.d.ts && tsc -p react-widget && cp react-widget/src/clickfix.d.ts react-widget/dist/clickfix.d.ts",
+    "test": "pnpm build && tsc -p type-tests && node --test tests/*.test.mjs",
+    "examples": "node examples/run.mjs",
+    "examples:check": "node examples/run.mjs --check && node examples/sync-docs.mjs --check",
+    "examples:sync": "node examples/sync-docs.mjs",
+    "publish:check": "pnpm build && for p in node visitor-core react-widget; do (cd $p && pnpm publish --dry-run --no-git-checks --access public); done"
+  },
+  "devDependencies": {
+    "@types/node": "22.19.0",
+    "@types/react": "19.2.2",
+    "openapi-typescript": "7.13.0",
+    "react": "19.2.0",
+    "typescript": "5.9.3",
+    "yaml": "2.9.1"
+  },
+  "packageManager": "pnpm@11.22.0"
+}

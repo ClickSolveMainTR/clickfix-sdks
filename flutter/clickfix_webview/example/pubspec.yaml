@@ -1,0 +1,23 @@
+name: clickfix_webview_example
+description: Example app for clickfix_webview that hands the session to the widget and opens a conversation.
+publish_to: none
+version: 0.1.0
+
+environment:
+  sdk: ^3.10.0
+  flutter: ">=3.38.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  clickfix_webview:
+    path: ../
+  url_launcher: ^6.3.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true

@@ -1,0 +1,47 @@
+{
+  "name": "@getclickfix/react-widget",
+  "version": "0.1.1",
+  "description": "ClickFix web widget for React: typed hooks around widget.js and a UI-free visitor client for your own support UI.",
+  "keywords": [
+    "clickfix",
+    "customer-support",
+    "react",
+    "widget",
+    "chat"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ClickSolveMainTR/clickfix-app-go.git",
+    "directory": "sdks/react-widget"
+  },
+  "homepage": "https://getclickfix.com/docs/integration-guide",
+  "bugs": {
+    "url": "https://github.com/ClickSolveMainTR/clickfix-app-go/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": false
+  },
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "dependencies": {
+    "@getclickfix/visitor-core": "workspace:^"
+  },
+  "peerDependencies": {
+    "react": ">=18"
+  },
+  "scripts": {
+    "prepack": "node ../scripts/prepack.mjs react-widget"
+  }
+}
