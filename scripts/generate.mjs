@@ -7,6 +7,7 @@ import { parse } from 'yaml';
 import openapiTS, { astToString } from 'openapi-typescript';
 import { buildPublicSpec } from './public-api.mjs';
 import { renderPhpEndpoints } from './php-endpoints.mjs';
+import { readPackageVersions, renderPackagesTable } from './package-versions.mjs';
 const root = new URL('../', import.meta.url);
 const spec = parse(await readFile(new URL('../../backend/docs/openapi.yaml', import.meta.url), 'utf8'));
 const check = process.argv.includes('--check');
@@ -45,6 +46,9 @@ try {
   const widget = subset(p => p.startsWith('/v1/widget/'));
   await output('node/src/schema.d.ts', astToString(await openapiTS(server)));
   await output('visitor-core/src/schema.d.ts', astToString(await openapiTS(widget)));
+  const versions = await readPackageVersions();
+  await output('../frontend/content/generated/packages.json', JSON.stringify(versions, null, 2) + '\n');
+  for (const locale of ['tr', 'en']) await output(`../frontend/content/generated/packages.${locale}.mdx`, renderPackagesTable(versions, locale));
   await output('php/src/Endpoints.php', renderPhpEndpoints(parse(await readFile(new URL('../../backend/docs/public-api.yaml', import.meta.url), 'utf8'))));
   const input = join(temp, 'public-api.json');
   await writeFile(input, JSON.stringify(server));

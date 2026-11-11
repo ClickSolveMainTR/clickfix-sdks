@@ -14,9 +14,9 @@ import { STUB } from './stub-server.mjs';
 
 const dir = fileURLToPath(new URL('./', import.meta.url));
 const checkOnly = process.argv.includes('--check');
-// --only=<widget|node|go|php|curl> runs one language (the CI php job runs the PHP examples alone).
+// --only=<widget|node|go|php|curl|react-native> runs one language (the CI php job runs the PHP examples alone).
 const only = (process.argv.find((a) => a.startsWith('--only=')) ?? '').slice('--only='.length);
-if (only && !['widget', 'node', 'go', 'php', 'curl'].includes(only)) throw new Error(`unknown --only=${only}`);
+if (only && !['widget', 'node', 'go', 'php', 'curl', 'react-native'].includes(only)) throw new Error(`unknown --only=${only}`);
 const want = (lang) => !only || only === lang;
 const log = (...a) => console.log('[examples]', ...a);
 const run = (cmd, args, opts = {}) => execFileSync(cmd, args, { cwd: dir, stdio: 'pipe', encoding: 'utf8', ...opts });
@@ -41,6 +41,19 @@ if (php) {
   log('php examples: syntax check');
   for (const f of phpFiles) run('php', ['-l', `php/${f}`]);
 } else if (want('php')) log('php or composer not on PATH: PHP examples skipped');
+if (want('react-native')) {
+  // The Expo example (CF-202) type-checks against the package sources (tsconfig paths), so no build is needed.
+  log('react-native example: tsc');
+  run('pnpm', ['exec', 'tsc', '--noEmit', '-p', '.'], { cwd: dir + 'react-native' });
+  if (!checkOnly) {
+    // EXPO_OFFLINE: versions are checked against the installed SDK's bundled
+    // module map, not the online catalogue, so an Expo patch released today
+    // (newer than the lockfile, held back by pnpm's release-age policy) does
+    // not turn CI red. --check skips expo-doctor.
+    log('react-native example: expo-doctor');
+    run('pnpm', ['exec', 'expo-doctor'], { cwd: dir + 'react-native', env: { ...process.env, CI: '1', EXPO_OFFLINE: '1' } });
+  }
+}
 if (checkOnly) { log('check ok'); process.exit(0); }
 
 // The PHP examples `require __DIR__.'/vendor/autoload.php'` like any Composer

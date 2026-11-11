@@ -1,0 +1,14 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "@getclickfix/expo": ["../../expo/src/index.ts"],
+      "@getclickfix/react-native": ["../../react-native/src/index.ts"],
+      "@getclickfix/react-native/ui": ["../../react-native/src/ui/index.ts"],
+      "@getclickfix/visitor-core": ["../../visitor-core/src/index.ts"]
+    }
+  },
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
+}

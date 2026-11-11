@@ -9,9 +9,11 @@ run pushes this directory there and tags each package version (`node/vX.Y.Z`, `g
 - `node`: `@getclickfix/node`, typed, tree-shakable Node 22+ fetch client and server cryptographic helpers.
 - `visitor-core`: `@getclickfix/visitor-core`, the DOM-free visitor (widget) API client for React Native, Node and browsers: browser mode (same-origin BFF) or app mode (mobile app key headers), retries, session renewal, realtime abstraction and the webview bridge types (CF-201).
 - `react-widget`: `@getclickfix/react-widget`, UI-free React 18+ hooks over `visitor-core` in browser mode.
+- `react-native`: `@getclickfix/react-native`, bare React Native (0.81+, Hermes) provider and hooks over `visitor-core` in app mode (mobile app key), `SecureStorage` adapters, deep links, and optional themeable screens under `@getclickfix/react-native/ui` (CF-202). Tests: jest with the react-native preset (`pnpm test:native`).
+- `expo`: `@getclickfix/expo`, Expo SDK 54+ wrapper of `react-native`: `ClickFixExpoProvider` with `expo-secure-store`, `expo-file-system`, `expo-linking`, `expo-constants` wired in (CF-202). Example app: `examples/react-native` (Expo 58; `expo-doctor` and `tsc` in CI).
 - `laravel`: `clickfix/laravel`, Laravel 10-13 package on top of `clickfix/sdk` (`php`): provider, facade, artisan commands, signed webhook route with Laravel events, `@clickfixWidget` Blade directive. Version is the newest `## X.Y.Z` heading in `laravel/CHANGELOG.md`; the `sdks-mirror` job pushes `laravel/` to the public repository `ClickSolveMainTR/clickfix-laravel` and tags `vX.Y.Z` there, which Packagist (`clickfix/laravel`) watches. Tests: `cd sdks/laravel && composer install && vendor/bin/phpunit` (CI runs the Testbench matrix in the `laravel` job).
 - `flutter/clickfix_webview`: `clickfix_webview` (pub.dev), Flutter webview widget + controller implementing the webview bridge contract v1 (`docs/webview-bridge.md`). Checked by the separate `flutter` CI job (`dart analyze`, `flutter test`, publish dry run); published by `sdk-publish` when the `PUB_CREDENTIALS` secret is set.
-- `examples`: the integration guide's samples (widget JS, Node, Go, PHP, curl) and the runner that verifies them (`examples/README.md`).
+- `examples`: the integration guide's samples (widget JS, Node, Go, PHP, curl), the Expo example app (`examples/react-native`) and the runner that verifies them (`examples/README.md`).
 
 The source of truth is `backend/docs/openapi.yaml`. `make sdks` selects only
 `/v1/public-api/*` for server clients and `/v1/widget/*` for the visitor core,
@@ -28,7 +30,7 @@ Requires Go matching `backend/go.mod`, Node 22+ and pnpm 11.22.0; the PHP packag
 ```sh
 make sdks
 make sdks-check                 # generated files current + guide pages current
-(cd sdks && pnpm test)
+(cd sdks && pnpm test)          # build, type tests, Node tests, then jest for react-native and expo
 (cd sdks/go && go test -p 2 ./...)
 (cd sdks/php && composer install && composer check)   # php-cs-fixer, PHPStan 8, PHPUnit
 make guide-examples             # run the guide samples (stub API, or CLICKFIX_BASE_URL)
@@ -41,13 +43,13 @@ in the required `security` job.
 ## Yayın (CF-199)
 
 Versions live in each package (`node/package.json`, `visitor-core/package.json`,
-`react-widget/package.json`, `go/VERSION`, the newest `php/CHANGELOG.md` entry) next to its `CHANGELOG.md`. On every
+`react-widget/package.json`, `react-native/package.json`, `expo/package.json`, `go/VERSION`, the newest `php/CHANGELOG.md` entry) next to its `CHANGELOG.md`. On every
 PR the `sdks` job runs `pnpm publish --dry-run` (pnpm, so the `workspace:`
-dependency of react-widget on visitor-core is rewritten to a version). On a
+dependencies of react-widget and react-native on visitor-core, and of expo on react-native, are rewritten to versions). On a
 green `main` the `sdk-publish` job publishes any npm version that is not on the
-registry yet, visitor-core before react-widget
+registry yet, in dependency order (visitor-core, react-widget, react-native, expo)
 (needs the `NPM_TOKEN` repository secret, an npm automation token for the
-`@clickfix` scope; without it the job skips with a note), and the `sdks-mirror`
+`@getclickfix` scope; without it the job skips with a note), and the `sdks-mirror`
 job pushes the tree and the `go/vX.Y.Z` tag to the public mirror when they do not exist.
 Nobody publishes or tags by hand. The PHP package (`sdks/php`, version = newest `CHANGELOG.md` entry and
 `Client::USER_AGENT`) is pushed by the same `sdks-mirror` job to the public repository

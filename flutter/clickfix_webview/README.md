@@ -2,7 +2,7 @@
 
 Secure ClickFix support screen for Flutter apps. It shows the hosted ClickFix
 widget in a webview that carries the visitor session and implements the
-[ClickFix webview bridge contract v1](https://github.com/ClickSolveMainTR/clickfix-app-go/blob/main/docs/webview-bridge.md)
+[ClickFix webview bridge contract v1](https://getclickfix.com/docs/integration-guide/mobile#bridge-contract)
 over a `webview_flutter` JavaScript channel: your app hands the signed-in
 user over (`identify`), sends app events (`track`), opens views or a
 conversation (deep link), and receives the widget's events (`unread`, `close`,
@@ -10,28 +10,20 @@ conversation (deep link), and receives the widget's events (`unread`, `close`,
 
 Full walkthrough with the server side (`user_hash`), deep links from push
 notifications and the security rules: the
-[integration guide, "Mobile"](https://getclickfix.com/docs/integration-guide#mobile).
+[integration guide, "Mobile: webview and Flutter"](https://getclickfix.com/docs/integration-guide/mobile).
 Changes: [CHANGELOG.md](CHANGELOG.md).
 
 ## Install
 
-The package will be published to pub.dev by the repository's `sdk-publish`
-job on the first tagged release. Until that first release, depend on it from
-git:
-
-```yaml
-dependencies:
-  clickfix_webview:
-    git:
-      url: https://github.com/ClickSolveMainTR/clickfix-app-go.git
-      path: sdks/flutter/clickfix_webview
-      ref: main
+```sh
+flutter pub add clickfix_webview
 ```
 
-After the first release, `flutter pub add clickfix_webview` works as usual.
 Requires Flutter 3.38+ / Dart 3.10+. The package depends on `webview_flutter`
 (Android `minSdk` 24, iOS 12+). Opening external links needs a launcher of your
-choice (`url_launcher` in the example); the package only validates them.
+choice (`url_launcher` in the example); the package only validates them. A
+complete app lives in
+[clickfix-examples/flutter-webview](https://github.com/ClickSolveMainTR/clickfix-examples/tree/main/flutter-webview).
 
 ## Use
 

@@ -6,7 +6,7 @@
     "keywords": ["clickfix", "customer-support", "api-client", "webhooks", "psr-18"],
     "homepage": "https://github.com/ClickSolveMainTR/clickfix-php",
     "support": {
-        "issues": "https://github.com/ClickSolveMainTR/clickfix-app-go/issues",
+        "issues": "https://github.com/ClickSolveMainTR/clickfix-php/issues",
         "source": "https://github.com/ClickSolveMainTR/clickfix-php",
         "docs": "https://getclickfix.com/docs/integration-guide"
     },

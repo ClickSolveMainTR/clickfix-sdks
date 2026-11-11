@@ -2,4 +2,7 @@ packages:
   - node
   - visitor-core
   - react-widget
+  - react-native
+  - expo
   - examples/node
+  - examples/react-native

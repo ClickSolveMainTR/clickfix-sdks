@@ -5,12 +5,13 @@
   "scripts": {
     "generate": "node scripts/generate.mjs",
     "check": "node scripts/generate.mjs --check",
-    "build": "tsc -p visitor-core && cp visitor-core/src/schema.d.ts visitor-core/dist/schema.d.ts && tsc -p node && cp node/src/schema.d.ts node/dist/schema.d.ts && tsc -p react-widget && cp react-widget/src/clickfix.d.ts react-widget/dist/clickfix.d.ts",
-    "test": "pnpm build && tsc -p type-tests && node --test tests/*.test.mjs",
+    "build": "tsc -p visitor-core && cp visitor-core/src/schema.d.ts visitor-core/dist/schema.d.ts && tsc -p node && cp node/src/schema.d.ts node/dist/schema.d.ts && tsc -p react-widget && cp react-widget/src/clickfix.d.ts react-widget/dist/clickfix.d.ts && tsc -p react-native && tsc -p expo",
+    "test": "pnpm build && tsc -p type-tests && node --test tests/*.test.mjs && pnpm test:native",
     "examples": "node examples/run.mjs",
     "examples:check": "node examples/run.mjs --check && node examples/sync-docs.mjs --check",
     "examples:sync": "node examples/sync-docs.mjs",
-    "publish:check": "pnpm build && for p in node visitor-core react-widget; do (cd $p && pnpm publish --dry-run --no-git-checks --access public); done"
+    "publish:check": "pnpm build && for p in node visitor-core react-widget react-native expo; do (cd $p && pnpm publish --dry-run --no-git-checks --access public); done",
+    "test:native": "pnpm --filter @getclickfix/react-native --filter @getclickfix/expo test"
   },
   "devDependencies": {
     "@types/node": "22.19.0",

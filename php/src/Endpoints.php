@@ -11,49 +11,49 @@ namespace ClickFix;
  */
 final class Endpoints
 {
-    /** getV1PublicApiCompanies: Şirketleri listele */
+    /** getV1PublicApiCompanies: List companies */
     public const GET_COMPANIES = ['GET', '/v1/public-api/companies'];
-    /** postV1PublicApiCompanyEvent: Şirket zaman çizelgesine olay gönder */
+    /** postV1PublicApiCompanyEvent: Send an event to the company timeline */
     public const POST_COMPANY_EVENTS = ['POST', '/v1/public-api/company-events'];
-    /** putV1PublicApiCompanyRevenue: Şirket gelirini gönder */
+    /** putV1PublicApiCompanyRevenue: Send company revenue */
     public const PUT_COMPANY_REVENUE = ['PUT', '/v1/public-api/company-revenue'];
-    /** putV1PublicApiCompanyUsage: Şirket kullanım sinyalini gönder */
+    /** putV1PublicApiCompanyUsage: Send a company usage signal */
     public const PUT_COMPANY_USAGE = ['PUT', '/v1/public-api/company-usage'];
-    /** getV1PublicApiContacts: Kişileri listele */
+    /** getV1PublicApiContacts: List contacts */
     public const GET_CONTACTS = ['GET', '/v1/public-api/contacts'];
-    /** postV1PublicApiContacts: Kişi oluştur */
+    /** postV1PublicApiContacts: Create a contact */
     public const POST_CONTACTS = ['POST', '/v1/public-api/contacts'];
-    /** updateIntegrationContact: Kişiyi güncelle */
+    /** updateIntegrationContact: Update a contact */
     public const PATCH_CONTACTS_BY_UUID = ['PATCH', '/v1/public-api/contacts/{uuid}'];
-    /** putV1PublicApiContactByExternalId: Kişiyi dış kimlikle oluştur veya güncelle */
+    /** putV1PublicApiContactByExternalId: Create or update a contact by external id */
     public const PUT_CONTACTS_BY_EXTERNAL_ID = ['PUT', '/v1/public-api/contacts/by-external-id'];
-    /** getV1PublicApiConversations: Konuşmaları listele */
+    /** getV1PublicApiConversations: List conversations */
     public const GET_CONVERSATIONS = ['GET', '/v1/public-api/conversations'];
-    /** createIntegrationConversation: Konuşma oluştur */
+    /** createIntegrationConversation: Create a conversation */
     public const POST_CONVERSATIONS = ['POST', '/v1/public-api/conversations'];
-    /** getV1PublicApiConversationsUuid: Konuşmayı getir */
+    /** getV1PublicApiConversationsUuid: Get a conversation */
     public const GET_CONVERSATIONS_BY_UUID = ['GET', '/v1/public-api/conversations/{uuid}'];
-    /** patchV1PublicApiConversationsUuid: Konuşmayı güncelle */
+    /** patchV1PublicApiConversationsUuid: Update a conversation */
     public const PATCH_CONVERSATIONS_BY_UUID = ['PATCH', '/v1/public-api/conversations/{uuid}'];
-    /** getV1PublicApiConversationsUuidMessages: Mesajları listele */
+    /** getV1PublicApiConversationsUuidMessages: List messages */
     public const GET_CONVERSATIONS_BY_UUID_MESSAGES = ['GET', '/v1/public-api/conversations/{uuid}/messages'];
-    /** postV1PublicApiConversationsUuidMessages: Mesaj veya iç not ekle */
+    /** postV1PublicApiConversationsUuidMessages: Add a message or internal note */
     public const POST_CONVERSATIONS_BY_UUID_MESSAGES = ['POST', '/v1/public-api/conversations/{uuid}/messages'];
-    /** subscribeIntegrationTrigger: REST hook aboneliği oluştur */
+    /** subscribeIntegrationTrigger: Create a REST hook subscription */
     public const POST_SUBSCRIPTIONS = ['POST', '/v1/public-api/subscriptions'];
-    /** unsubscribeIntegrationTrigger: REST hook aboneliğini sil */
+    /** unsubscribeIntegrationTrigger: Delete a REST hook subscription */
     public const DELETE_SUBSCRIPTIONS_BY_UUID = ['DELETE', '/v1/public-api/subscriptions/{uuid}'];
-    /** pollIntegrationTriggers: Tetikleyici olaylarını yokla */
+    /** pollIntegrationTriggers: Poll trigger events */
     public const GET_TRIGGERS = ['GET', '/v1/public-api/triggers'];
-    /** getV1PublicApiWebhooks: Webhook aboneliklerini listele */
+    /** getV1PublicApiWebhooks: List webhook subscriptions */
     public const GET_WEBHOOKS = ['GET', '/v1/public-api/webhooks'];
-    /** postV1PublicApiWebhooks: Webhook aboneliği oluştur */
+    /** postV1PublicApiWebhooks: Create a webhook subscription */
     public const POST_WEBHOOKS = ['POST', '/v1/public-api/webhooks'];
-    /** deleteV1PublicApiWebhooksUuid: Webhook aboneliğini sil */
+    /** deleteV1PublicApiWebhooksUuid: Delete a webhook subscription */
     public const DELETE_WEBHOOKS_BY_UUID = ['DELETE', '/v1/public-api/webhooks/{uuid}'];
-    /** putV1PublicApiWebhooksUuid: Webhook aboneliğini güncelle */
+    /** putV1PublicApiWebhooksUuid: Update a webhook subscription */
     public const PUT_WEBHOOKS_BY_UUID = ['PUT', '/v1/public-api/webhooks/{uuid}'];
-    /** receiveAPIChannelMessage: Müşteri mesajı gönder */
+    /** receiveAPIChannelMessage: Send a customer message */
     public const POST_WEBHOOKS_CHANNELS_API_BY_INSTANCE = ['POST', '/v1/webhooks/channels/api/{instance}'];
 
     /** @var list<array{0: string, 1: string}> */

@@ -34,3 +34,23 @@ const cmd:BridgeCommand={type:'clickfix:session',token:core.getToken()};void cmd
 // @ts-expect-error unknown bridge command
 const bad:BridgeCommand={type:'clickfix:nope'};void bad;
 const msg=parseMessage('{}');if(msg&&msg.type==='clickfix:session'){const t:string=msg.token;void t;}
+import type { ClickFixProviderProps, IdentifyOptions, SecureStorage, Message } from '../react-native/dist/index.js';
+import { parseConversationLink, memoryStorage, keychainStorage } from '../react-native/dist/index.js';
+import type { ChatScreenProps, ClickFixTheme } from '../react-native/dist/ui/index.js';
+import type { ClickFixExpoProviderProps } from '../expo/dist/index.js';
+import { conversationURL, fileAttachment } from '../expo/dist/index.js';
+const rnProps:ClickFixProviderProps={appKey:'cf_app_x',packageName:'com.example.app',widgetId:'id',baseUrl:'https://support.example.test',getUserHash:async(userId,companyId)=>`${userId}${companyId??''}`};void rnProps;
+// @ts-expect-error the bare provider needs the package name the app key is bound to
+const noPackage:ClickFixProviderProps={appKey:'k',widgetId:'id',baseUrl:'https://x'};void noPackage;
+const expoProps:ClickFixExpoProviderProps={appKey:'cf_app_x',widgetId:'id',baseUrl:'https://support.example.test'};void expoProps; // packageName comes from app.json
+const who:IdentifyOptions={userId:'1001',company:{id:'F-77'}};void who; // userHash optional with getUserHash
+// @ts-expect-error user_hash is never computed on the device: no secret option exists
+const leak:IdentifyOptions={userId:'1001',identitySecret:'s'};void leak;
+const store:SecureStorage=memoryStorage();void store;void keychainStorage({setGenericPassword:async()=>true,getGenericPassword:async()=>false,resetGenericPassword:async()=>true});
+const link:string|null=parseConversationLink('myapp://conversation/x');void link;void conversationURL('x');
+const file=fileAttachment('file:///a.png',{maxBytes:1});const uri:string=file.uri;void uri;
+const chat:ChatScreenProps={conversation:null,pickFile:async()=>({uri:'file:///a',name:'a',type:'image/png'})};void chat;
+// @ts-expect-error a chat screen is always told which conversation (or null for a new one)
+const noConversation:ChatScreenProps={};void noConversation;
+const theme:ClickFixTheme['colors']['primary']='#000';void theme;
+const m:Message['direction']='in';void m;

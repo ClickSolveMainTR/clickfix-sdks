@@ -1,0 +1,76 @@
+{
+  "name": "@getclickfix/expo",
+  "version": "0.1.0",
+  "description": "ClickFix customer support for Expo (SDK 54+): one-line ClickFixExpoProvider over @getclickfix/react-native with expo-secure-store token storage, expo-file-system attachments, expo-linking deep links and expo-constants app identity.",
+  "keywords": [
+    "clickfix",
+    "customer-support",
+    "expo",
+    "react-native",
+    "chat",
+    "mobile"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ClickSolveMainTR/clickfix-sdks.git",
+    "directory": "expo"
+  },
+  "homepage": "https://getclickfix.com/docs/integration-guide",
+  "bugs": {
+    "url": "https://github.com/ClickSolveMainTR/clickfix-sdks/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": false
+  },
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "dependencies": {
+    "@getclickfix/react-native": "workspace:^"
+  },
+  "peerDependencies": {
+    "expo": ">=54",
+    "expo-constants": ">=18",
+    "expo-file-system": ">=19",
+    "expo-linking": ">=8",
+    "expo-secure-store": ">=15",
+    "react": ">=18.2",
+    "react-native": ">=0.81"
+  },
+  "devDependencies": {
+    "@babel/core": "7.28.6",
+    "@react-native/babel-preset": "0.88.1",
+    "@react-native/jest-preset": "0.88.1",
+    "@testing-library/react-native": "14.1.0",
+    "@types/jest": "30.0.0",
+    "@types/react": "19.3.0",
+    "expo": "~58.0.20",
+    "expo-constants": "~58.0.12",
+    "expo-file-system": "~58.0.13",
+    "expo-linking": "~58.0.13",
+    "expo-secure-store": "~58.0.2",
+    "jest": "29.7.0",
+    "react": "19.3.0",
+    "react-native": "0.88.1",
+    "test-renderer": "1.0.0",
+    "typescript": "~6.0.3"
+  },
+  "scripts": {
+    "build": "tsc -p .",
+    "test": "jest",
+    "prepack": "node ../scripts/prepack.mjs expo"
+  }
+}

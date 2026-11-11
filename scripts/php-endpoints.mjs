@@ -12,6 +12,7 @@ export function constantName(method, path) {
 export function renderPhpEndpoints(spec) {
   const ops = [];
   for (const [path, item] of Object.entries(spec.paths)) {
+    if (path.startsWith('/v1/app-context/')) continue; // public but keyless: no SDK resource wraps it
     for (const method of METHODS) {
       const op = item[method];
       if (!op) continue;
