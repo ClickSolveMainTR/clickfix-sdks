@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1
+
+- Paket metadatası: `repository` ve `issue_tracker` herkese açık ayna repo `ClickSolveMainTR/clickfix-sdks` olarak düzeltildi; kod değişikliği yok.
+
 ## 0.1.0
 
 - First release: `ClickFixWebView` and `ClickFixController` implementing the

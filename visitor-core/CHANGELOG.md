@@ -2,6 +2,10 @@
 
 Sürümleme: [SemVer](https://semver.org). `0.x` sürümlerinde küçük sürüm (`0.N`) kırıcı değişiklik taşıyabilir; her kırıcı değişiklik burada **Kırıcı** başlığıyla yazılır. Sürüm `package.json` içindedir; `main`'e birleşen bir değişiklikte sürüm değiştiyse CI (`sdk-publish`) npm'e yayımlar.
 
+## 0.1.1 - 2026-11-11
+
+- Paket metadatası: `repository` ve `bugs` herkese açık ayna repo `ClickSolveMainTR/clickfix-sdks` (`visitor-core/`) olarak düzeltildi; kod değişikliği yok.
+
 ## 0.1.0 - 2026-11-13
 
 İlk yayın (CF-201). `@getclickfix/react-widget` içindeki taşıma katmanı buraya taşındı; DOM ve `window` yok (tsconfig `lib: ES2022`), React Native (Hermes), Node 22+ ve tarayıcıda çalışır.

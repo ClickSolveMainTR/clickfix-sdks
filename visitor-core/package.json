@@ -1,6 +1,6 @@
 {
   "name": "@getclickfix/visitor-core",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "ClickFix visitor (widget) API core for any JavaScript runtime: typed fetch client, retries and session renewal, realtime abstraction and the webview bridge types. No DOM; React Native (Hermes), Node 22+ and browsers.",
   "keywords": [
     "clickfix",
@@ -13,12 +13,12 @@
   "license": "UNLICENSED",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ClickSolveMainTR/clickfix-app-go.git",
-    "directory": "sdks/visitor-core"
+    "url": "git+https://github.com/ClickSolveMainTR/clickfix-sdks.git",
+    "directory": "visitor-core"
   },
   "homepage": "https://getclickfix.com/docs/integration-guide",
   "bugs": {
-    "url": "https://github.com/ClickSolveMainTR/clickfix-app-go/issues"
+    "url": "https://github.com/ClickSolveMainTR/clickfix-sdks/issues"
   },
   "publishConfig": {
     "access": "public",
