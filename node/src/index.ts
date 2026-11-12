@@ -65,7 +65,7 @@ export function verifyWebhook(secret:string,timestamp:string,signature:string,bo
  * Server-only: send the hash to your browser; keep the secret on your server.
  * With companyId (the company's id in your system, sent as identify `company.id`)
  * the hash covers both ids: hex(HMAC-SHA256(secret, userId + "\n" + companyId)),
- * so a signed-in user cannot claim another company (CF-206). Without it the
+ * so a signed-in user cannot claim another company. Without it the
  * original formula hex(HMAC-SHA256(secret, userId)) is used. Neither id may
  * contain a line break.
  */

@@ -1,6 +1,6 @@
 {
   "name": "@getclickfix/react-native",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "ClickFix customer support for React Native: provider and hooks (visitor, conversations, messages, files, typing, read receipts, realtime, help search, rating) over @getclickfix/visitor-core, plus optional themeable screens. Bare React Native and Expo.",
   "keywords": [
     "clickfix",

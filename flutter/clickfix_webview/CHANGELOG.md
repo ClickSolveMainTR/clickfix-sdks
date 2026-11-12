@@ -1,8 +1,13 @@
 # Changelog
 
+## 0.1.2
+
+- The package declares only the Dart constraint `sdk: ^3.10.0`. The extra `flutter: ">=3.38.0"` bound contradicted it: Flutter 3.38.0 bundles a 3.10.0 prerelease of Dart, so `pub get` failed on exactly that version. Any Flutter release whose Dart is a stable 3.10.0 or newer resolves.
+- Docs and comments: no internal tracker references.
+
 ## 0.1.1
 
-- Paket metadatası: `repository` ve `issue_tracker` herkese açık ayna repo `ClickSolveMainTR/clickfix-sdks` olarak düzeltildi; kod değişikliği yok.
+- Package metadata: `repository` and `issue_tracker` point at the public mirror `ClickSolveMainTR/clickfix-sdks`. No code change.
 
 ## 0.1.0
 
@@ -16,4 +21,4 @@
 - Deep links: `conversation` parameter and `open(conversation:)`.
 - `ClickFixCompany.id` is the company's external id and may be covered by
   `userHash` (`HMAC-SHA256(secret, userId + "\n" + companyId)`, bridge
-  contract 1.2, CF-206); documented on `ClickFixIdentity`.
+  contract 1.2); documented on `ClickFixIdentity`.

@@ -197,7 +197,6 @@ export interface ClickFixCommand {
     command:
       | "close"
       | "toggle"
-      | "reset"
       | "shutdown"
       | "show"
       | "hide"
@@ -205,6 +204,8 @@ export interface ClickFixCommand {
       | "hideLauncher",
   ): void;
   (command: "open", view?: ClickFixView | { conversation: string }): void;
+  /** Forget the visitor (call on logout); resolves once the new anonymous session exists. */
+  (command: "reset"): Promise<void>;
   (command: "startReplay"): Promise<void>;
   (command: "stopCapture", revoke?: boolean): Promise<void>;
   (command: "identify", identity: ClickFixIdentity): Promise<void>;
@@ -323,7 +324,7 @@ export type ClickFixBridgeCommand =
   | { type: "clickfix:consent"; id?: string; granted: boolean }
   | { type: "clickfix:reset"; id?: string }
   | { type: "clickfix:get-state"; id?: string }
-  /** Continue the session the app started natively (@getclickfix/visitor-core, CF-201). */
+  /** Continue the session the app started natively (@getclickfix/visitor-core). */
   | { type: "clickfix:session"; id?: string; token: string };
 
 /** Widget -> host messages of the webview bridge. */

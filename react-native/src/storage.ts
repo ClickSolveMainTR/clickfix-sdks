@@ -1,4 +1,4 @@
-// Where the visitor token lives between launches (CF-202). The token is a
+// Where the visitor token lives between launches. The token is a
 // bearer credential for the visitor's conversations, so it belongs in the
 // platform keystore: `react-native-keychain` on bare React Native (adapter
 // below), `expo-secure-store` on Expo (`@getclickfix/expo`). The default is

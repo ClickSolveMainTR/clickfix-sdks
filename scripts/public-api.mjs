@@ -143,21 +143,21 @@ function applyExamples(op, examples, id) {
   }
 }
 
-// Internal tracker references ("(CF-86)", "CF-195: ...") mean nothing to
+// Internal tracker references ("(CF-<n>)", "CF-<n>: ...") mean nothing to
 // integrators; strip them and start the sentence with a capital again.
 function scrubText(v) {
   const text = v
     .replace(/\s*\(CF-\d+(?:[,/ ]+CF-\d+)*\)/g, '')
     .replace(/\(CF-\d+,\s*/g, '(')
     .replace(/\bCF-\d+[:.]?\s*/g, '');
-  // A removed "CF-195: " prefix leaves a lowercase start; restore the capital.
+  // A removed "CF-<n>: " prefix leaves a lowercase start; restore the capital.
   if (/^\s*CF-\d+/.test(v)) {
     const t = text.trimStart();
     return t.charAt(0).toUpperCase() + t.slice(1);
   }
   return text;
 }
-function scrub(node) {
+export function scrub(node) {
   if (Array.isArray(node)) return node.map(scrub);
   if (!node || typeof node !== 'object') return node;
   for (const [k, v] of Object.entries(node)) {

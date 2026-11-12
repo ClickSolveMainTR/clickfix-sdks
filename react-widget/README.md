@@ -2,7 +2,7 @@
 
 UI-free, typed, tree-shakable React 18+ hooks around the existing visitor API.
 The transport is [`@getclickfix/visitor-core`](../visitor-core/README.md) in browser
-mode (same-origin BFF); no other runtime dependency besides the React peer.
+mode (the page origin is the credential); no other runtime dependency besides the React peer.
 
 ```sh
 npm install @getclickfix/react-widget
@@ -18,7 +18,7 @@ import { createWidgetClient, useWidget, useMessages, useTyping } from '@getclick
 export function Support() {
   const [client] = useState(() => createWidgetClient({
     publicId: 'your-widget-public-uuid',
-    baseURL: '/api', // same-origin BFF; browser never talks to the Go host
+    appOrigin: 'https://getclickfix.com', // the ClickFix app; or baseURL: '/api' behind your own same-origin proxy
     onToken: token => sessionStorage.setItem('support-token', token),
   }));
   const { visitor } = useWidget(client);
@@ -31,6 +31,10 @@ export function Support() {
   return <span>{visitor ? 'Ready' : 'Connecting'}</span>;
 }
 ```
+
+`appOrigin` sends requests to `<appOrigin>/api/v1/widget/...` across origins (CORS, cookies
+are never sent); add your site to the widget's **allowed domains**. Use `baseURL` instead
+when a same-origin proxy of the widget API serves your page (the default is `/api`).
 
 Initialize after your application's consent step. Keep one stable client per widget
 and authenticated user. Optional `token` resumes a saved session; `onToken` lets your
@@ -51,7 +55,7 @@ const help = await client.helpSearch('billing', 'en');
 
 `user_hash` is hex HMAC-SHA256(identity secret, user_id), produced on your server
 (e.g. `@getclickfix/node.identityHash`); with `company: { id }` it is
-hex HMAC-SHA256(identity secret, user_id + "\n" + company_id) (CF-206). Never ship the
+hex HMAC-SHA256(identity secret, user_id + "\n" + company_id). Never ship the
 secret to the browser.
 Session tokens are renewed by bootstrap/identify. Calls accept AbortSignals.
 `useConversations`, `useMessages` and `useHelpSearch` return `{data,error,loading,reload}`;
@@ -68,7 +72,7 @@ owns no socket or polling loop. `rate` and `updateProfile` cover optional visito
 features. All requests omit cookies and use only the visitor Bearer token. No UI,
 CSS, global event listeners or browser storage side effects are included.
 
-## Script SDK hooks (CF-150)
+## Script SDK hooks
 
 For the ready-made messenger UI (Shadow DOM, launcher, home, help, triggers…), load the
 script SDK with typed hooks. Types are the public `widget.d.ts` contract
@@ -92,6 +96,10 @@ export function Support({ consent }: { consent: boolean }) {
 ```
 
 `loadClickFix(options)` injects `widget.js` once and boots it; `clickFix()` returns the
-(queue-stubbed) global SDK anywhere. `useClickFix` shuts the widget down on unmount.
+global SDK (calls are queued until `widget.js` has loaded). `useClickFix` shuts the widget down on unmount.
+The hooks never touch `window` while rendering, so a component that uses them renders on the
+server (Next.js App Router, static prerendering) without a client-only wrapper; the `sdk` they
+return is resolved when you call it, from an effect or an event handler. `sdk('reset')` and
+`sdk.reset()` both return a promise that resolves once the new anonymous session exists.
 Full command and event list: [docs/widget-sdk.md](../../docs/widget-sdk.md);
-a runnable page: [examples/widget](../../examples/widget).
+a runnable Next.js app: [clickfix-examples/nextjs-widget](https://github.com/ClickSolveMainTR/clickfix-examples/tree/main/nextjs-widget).

@@ -1,4 +1,4 @@
-// The visitor API client (CF-201): everything the ClickFix widget does over
+// The visitor API client: everything the ClickFix widget does over
 // HTTP, without a UI and without a DOM. Browsers use it through the app's
 // same-origin BFF (`/api/v1/widget/*`, the page origin is the credential);
 // native apps use it with a mobile app key (`X-ClickFix-App-Key` +
@@ -35,7 +35,7 @@ export type HelpResult = S['EnvelopeWidgetHelp']['data'];
 export type TrackedEvent = NonNullable<SendInput['events']>[number];
 
 /** Version reported to the API in bootstrap (`sdk_version`). */
-export const CORE_VERSION = 'core-0.1.0';
+export const CORE_VERSION = 'core-0.2.0';
 
 /** Code of a 401 whose visitor token is missing, expired or foreign. */
 export const TOKEN_INVALID = 'WIDGET_VISITOR_TOKEN_INVALID';
@@ -333,7 +333,7 @@ export function createVisitorClient(options: VisitorClientOptions) {
       if (current === generation) save(out, null);
       return out;
     },
-    /** Custom fields and mapped attributes (CF-196). */
+    /** Custom fields and mapped attributes. */
     setAttributes: (attributes: AttributesInput['attributes'], signal?: AbortSignalLike) =>
       request<AttributesResult>('/attributes', 'PATCH', { attributes }, { signal, retry: true }),
     /** Raw access for routes the core does not wrap (same retries and renewal). */

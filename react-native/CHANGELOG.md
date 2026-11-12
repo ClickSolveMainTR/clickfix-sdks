@@ -1,12 +1,17 @@
 # @getclickfix/react-native
 
-Sürümleme: [SemVer](https://semver.org). `0.x` sürümlerinde küçük sürüm (`0.N`) kırıcı değişiklik taşıyabilir; her kırıcı değişiklik burada **Kırıcı** başlığıyla yazılır. Sürüm `package.json` içindedir; `main`'e birleşen bir değişiklikte sürüm değiştiyse CI (`sdk-publish`) npm'e yayımlar ve ayna repoda `react-native/vX.Y.Z` etiketi basılır.
+Versioning: [SemVer](https://semver.org). In `0.x` a minor version (`0.N`) may carry a breaking change; every breaking change is listed here under **Breaking**. The version lives in `package.json`; a release is published to npm automatically and tagged `react-native/vX.Y.Z` in the mirror.
+
+## 0.2.0 - 2026-11-12
+
+- Re-exports the webview bridge helpers of `@getclickfix/visitor-core` (`commandScript`, `parseMessage`, `isSafeLink`, `encodeCommand`, `EVENT_NAMES`, `BRIDGE_VERSION` and the `Bridge*` types), so an app can also host the ready-made widget page in `react-native-webview` and hand it the provider's session (`{ type: 'clickfix:session', token: client.getToken() }`).
+- Requires `@getclickfix/visitor-core` 0.2: `clickfix:event` payloads are typed per event (see its changelog, **Breaking** for code that matched arbitrary event names).
 
 ## 0.1.0 - 2026-11-11
 
-İlk yayın (CF-202). Bare React Native çekirdeği: `@getclickfix/visitor-core` (app modu, `X-ClickFix-App-Key` + paket adı) üzerine React bağları; DOM yok (tsconfig `lib: ES2022`, `types: []`), Hermes uyumlu ESM, yalnız `react` ve `react-native` peer (`react-native-keychain` isteğe bağlı).
+First release. The bare React Native core: React bindings over `@getclickfix/visitor-core` in app mode (`X-ClickFix-App-Key` plus package name); no DOM (tsconfig `lib: ES2022`, `types: []`), Hermes-compatible ESM, only `react` and `react-native` as peers (`react-native-keychain` optional).
 
-- `ClickFixProvider`: tek istemci, `getUserHash` ile sunucudan `user_hash`, `SecureStorage` ile belirteç saklama (varsayılan bellek; `keychainStorage` adaptörü), React Native `WebSocket` ile realtime, ön plana dönüşte yenileme, `autoInit`/`init()`.
-- Hook'lar: `useClickFix`, `useVisitor` (identify: kişi + firma dış kimliği, profil, özel alanlar, `track`, `setScreen`, `reset`), `useConversations` (bootstrap listesi, `create`), `useConversation` (mesajlar eskiden yeniye, `send` metin ve/veya dosya, `loadMore`, `setTyping`, `markRead`, `agentTyping`, realtime + soket yokken anket), `useHelpSearch` (debounce), `useRating`.
-- Derin bağlantı: `parseConversationLink`, `useDeepLinkConversation` (`?conversation=`, `/conversation/<id>`, Expo Go `/--/` yolu).
-- `@getclickfix/react-native/ui`: `ConversationListScreen`, `ChatScreen` (ön form, dosya ekleme, yazıyor, okundu, puanlama), `PreChatForm`; `ClickFixThemeProvider`, `lightTheme`/`darkTheme`, `labelsEn`/`labelsTr`. StyleSheet ile temalanabilir, ek bağımlılık yok.
+- `ClickFixProvider`: one client, `user_hash` from your server through `getUserHash`, token storage through `SecureStorage` (memory by default; `keychainStorage` adapter), realtime over React Native's `WebSocket`, refresh on foreground, `autoInit` / `init()`.
+- Hooks: `useClickFix`, `useVisitor` (identify with contact and company external ids, profile, custom fields, `track`, `setScreen`, `reset`), `useConversations` (bootstrap list, `create`), `useConversation` (messages oldest first, `send` text and/or a file, `loadMore`, `setTyping`, `markRead`, `agentTyping`, realtime with polling while the socket is down), `useHelpSearch` (debounced), `useRating`.
+- Deep links: `parseConversationLink`, `useDeepLinkConversation` (`?conversation=`, `/conversation/<id>`, the Expo Go `/--/` path).
+- `@getclickfix/react-native/ui`: `ConversationListScreen`, `ChatScreen` (pre-chat form, attachments, typing, read receipts, rating), `PreChatForm`; `ClickFixThemeProvider`, `lightTheme` / `darkTheme`, `labelsEn` / `labelsTr`. Themeable with StyleSheet, no extra dependency.

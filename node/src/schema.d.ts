@@ -80,12 +80,12 @@ export interface paths {
         };
         /**
          * Public API: get contacts
-         * @description API key scope (`contacts:read`) and the key creator's current permissions both apply. Per-key requests/minute limit. Same response envelope and pagination as tenant API. Items carry `external_id`, `verified_at` and the company's `company_external_id` (CF-195).
+         * @description API key scope (`contacts:read`) and the key creator's current permissions both apply. Per-key requests/minute limit. Same response envelope and pagination as tenant API. Items carry `external_id`, `verified_at` and the company's `company_external_id`.
          */
         get: operations["getV1PublicApiContacts"];
         put?: never;
         /**
-         * Public API: create a contact (CF-195)
+         * Public API: create a contact
          * @description Same body and response as `POST /v1/tenant/contacts`. Needs the `contacts:write` key scope, the key creator's `tenant.contacts.write` permission and an `Idempotency-Key` header. Prefer `PUT /v1/public-api/contacts/by-external-id` to sync users from your system.
          */
         post: operations["postV1PublicApiContacts"];
@@ -104,7 +104,7 @@ export interface paths {
         };
         get?: never;
         /**
-         * Public API: create or update a contact by your user id (CF-195)
+         * Public API: create or update a contact by your user id
          * @description Same body and response as `PUT /v1/tenant/contacts/by-external-id`: 201 when created, 200 when the contact with `external_id` existed; the same id twice edits one contact. Needs the `contacts:write` key scope, the key creator's `tenant.contacts.write` permission and an `Idempotency-Key` header (use a new key per change; a reused key replays the stored answer).
          */
         put: operations["putV1PublicApiContactByExternalId"];
@@ -124,7 +124,7 @@ export interface paths {
         };
         /**
          * Public API: get companies
-         * @description API key scope (`companies:read`) and the key creator's current permissions both apply. Items carry `domain` and `external_id`, the company's own id (CF-195, separate from contact ids).
+         * @description API key scope (`companies:read`) and the key creator's current permissions both apply. Items carry `domain` and `external_id`, the company's own id (separate from contact ids).
          */
         get: operations["getV1PublicApiCompanies"];
         put?: never;
@@ -144,7 +144,7 @@ export interface paths {
         };
         get?: never;
         /**
-         * Public API: report a customer's product usage (CF-87)
+         * Public API: report a customer's product usage
          * @description Same body and response as `PUT /v1/tenant/company-usage`. Needs the `health:write` key scope and an `Idempotency-Key` header.
          */
         put: operations["putV1PublicApiCompanyUsage"];
@@ -165,7 +165,7 @@ export interface paths {
         get?: never;
         put?: never;
         /**
-         * Public API: send an in-product event to a company timeline (CF-85)
+         * Public API: send an in-product event to a company timeline
          * @description Same body and response as `POST /v1/tenant/company-events`. Needs the `events:write` key scope and an `Idempotency-Key` header.
          */
         post: operations["postV1PublicApiCompanyEvent"];
@@ -184,7 +184,7 @@ export interface paths {
         };
         get?: never;
         /**
-         * Public API: push a customer's revenue (CF-86)
+         * Public API: push a customer's revenue
          * @description Same body and response as `PUT /v1/tenant/company-revenue`. Needs the `revenue:write` key scope and an `Idempotency-Key` header; a reused key with a different body returns 409.
          */
         put: operations["putV1PublicApiCompanyRevenue"];
@@ -374,7 +374,7 @@ export interface components {
             message: string;
             code?: string;
         };
-        /** @description Name the contact by contact_uuid or contact_external_id (CF-195, the customer's own user id), not both. On a widget inbox a contact with an external id gets its widget identity, so the agent can write first and the signed-in user finds the conversation on the site. */
+        /** @description Name the contact by contact_uuid or contact_external_id (the customer's own user id), not both. On a widget inbox a contact with an external id gets its widget identity, so the agent can write first and the signed-in user finds the conversation on the site. */
         IntegrationCreateConversation: {
             /** Format: uuid */
             contact_uuid?: string;
@@ -422,7 +422,7 @@ export interface components {
                 [key: string]: unknown;
             };
             blocked?: boolean;
-            /** @description CF-195: the customer's own user id; empty clears it. 409 EXTERNAL_ID_EXISTS when another contact has it. */
+            /** @description The customer's own user id; empty clears it. 409 EXTERNAL_ID_EXISTS when another contact has it. */
             external_id?: string;
         };
         EnvelopeContact: {
@@ -437,7 +437,7 @@ export interface components {
             name: string;
             email: string | null;
             phone: string | null;
-            /** @description CF-195: the customer's own user id, unique in the organization. */
+            /** @description The customer's own user id, unique in the organization. */
             external_id: string | null;
             identity_state: components["schemas"]["ContactIdentityState"];
             /**
@@ -466,7 +466,7 @@ export interface components {
             updated_at: string;
         };
         /**
-         * @description CF-195. verified: the contact proved the customer's user id with
+         * @description Verified: the contact proved the customer's user id with
          *     user_hash (widget identify). anonymous: no name, e-mail or phone.
          *     self_named: a name, e-mail or phone the contact or its channel gave,
          *     not proved.
@@ -521,7 +521,7 @@ export interface components {
                 [key: string]: unknown;
             };
             /** @default api */
-            source: string;
+            source?: string;
             idempotency_key?: string;
             /** Format: date-time */
             occurred_at?: string;
@@ -575,7 +575,7 @@ export interface components {
             };
             meta: components["schemas"]["ResponseMeta"];
         };
-        /** @description What the customer pays the organization (CF-86). Amounts are minor units of `currency`. */
+        /** @description What the customer pays the organization. Amounts are minor units of `currency`. */
         CompanyRevenue: {
             /** Format: int64 */
             mrr_minor: number;
@@ -894,7 +894,7 @@ export interface operations {
                 offset?: number;
                 /** @description Case-insensitive match on the contact name or e-mail. */
                 q?: string;
-                /** @description CF-195: the customer's own user id, exact match. */
+                /** @description The customer's own user id, exact match. */
                 external_id?: string;
             };
             header?: never;
@@ -958,7 +958,9 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["ContactInput"] & Record<string, never>;
+                "application/json": components["schemas"]["ContactInput"] & {
+                    external_id: string;
+                };
             };
         };
         responses: {
@@ -991,7 +993,7 @@ export interface operations {
             query?: {
                 limit?: number;
                 offset?: number;
-                /** @description CF-195: the company's id in your system, exact match. */
+                /** @description The company's id in your system, exact match. */
                 external_id?: string;
             };
             header?: never;

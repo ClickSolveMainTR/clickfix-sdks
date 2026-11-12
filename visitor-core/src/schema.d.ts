@@ -4,7 +4,7 @@ export interface paths {
             query?: never;
             header?: {
                 /**
-                 * @description Mobile app key (CF-201): a native app sends it with
+                 * @description Mobile app key: a native app sends it with
                  *     `X-ClickFix-App-Package` instead of a page origin; the widget's
                  *     origin allowlist is then not consulted. Unknown, revoked or
                  *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key
@@ -33,7 +33,7 @@ export interface paths {
             query?: never;
             header?: {
                 /**
-                 * @description Mobile app key (CF-201): a native app sends it with
+                 * @description Mobile app key: a native app sends it with
                  *     `X-ClickFix-App-Package` instead of a page origin; the widget's
                  *     origin allowlist is then not consulted. Unknown, revoked or
                  *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key
@@ -62,7 +62,7 @@ export interface paths {
             query?: never;
             header?: {
                 /**
-                 * @description Mobile app key (CF-201): a native app sends it with
+                 * @description Mobile app key: a native app sends it with
                  *     `X-ClickFix-App-Package` instead of a page origin; the widget's
                  *     origin allowlist is then not consulted. Unknown, revoked or
                  *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key
@@ -91,7 +91,7 @@ export interface paths {
             query?: never;
             header?: {
                 /**
-                 * @description Mobile app key (CF-201): a native app sends it with
+                 * @description Mobile app key: a native app sends it with
                  *     `X-ClickFix-App-Package` instead of a page origin; the widget's
                  *     origin allowlist is then not consulted. Unknown, revoked or
                  *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key
@@ -120,7 +120,7 @@ export interface paths {
             query?: never;
             header?: {
                 /**
-                 * @description Mobile app key (CF-201): a native app sends it with
+                 * @description Mobile app key: a native app sends it with
                  *     `X-ClickFix-App-Package` instead of a page origin; the widget's
                  *     origin allowlist is then not consulted. Unknown, revoked or
                  *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key
@@ -149,7 +149,7 @@ export interface paths {
             query?: never;
             header?: {
                 /**
-                 * @description Mobile app key (CF-201): a native app sends it with
+                 * @description Mobile app key: a native app sends it with
                  *     `X-ClickFix-App-Package` instead of a page origin; the widget's
                  *     origin allowlist is then not consulted. Unknown, revoked or
                  *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key
@@ -175,7 +175,7 @@ export interface paths {
         /**
          * Store mapped visitor attributes
          * @description `ClickFix('setAttributes', ...)`. A key is stored when it is the key of
-         *     a contact custom field (CF-196: defining the field is the only step;
+         *     a contact custom field (defining the field is the only step;
          *     the field's `widget_access` decides whether anonymous visitors may
          *     write it, default identified visitors only) or an entry of the
          *     widget's attribute mapping (an alias; entries not marked anonymous
@@ -193,7 +193,7 @@ export interface paths {
             query?: never;
             header?: {
                 /**
-                 * @description Mobile app key (CF-201): a native app sends it with
+                 * @description Mobile app key: a native app sends it with
                  *     `X-ClickFix-App-Package` instead of a page origin; the widget's
                  *     origin allowlist is then not consulted. Unknown, revoked or
                  *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key
@@ -231,7 +231,7 @@ export interface paths {
             query?: never;
             header?: {
                 /**
-                 * @description Mobile app key (CF-201): a native app sends it with
+                 * @description Mobile app key: a native app sends it with
                  *     `X-ClickFix-App-Package` instead of a page origin; the widget's
                  *     origin allowlist is then not consulted. Unknown, revoked or
                  *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key
@@ -273,7 +273,7 @@ export interface paths {
             query?: never;
             header?: {
                 /**
-                 * @description Mobile app key (CF-201): a native app sends it with
+                 * @description Mobile app key: a native app sends it with
                  *     `X-ClickFix-App-Package` instead of a page origin; the widget's
                  *     origin allowlist is then not consulted. Unknown, revoked or
                  *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key
@@ -308,7 +308,7 @@ export interface paths {
             query?: never;
             header?: {
                 /**
-                 * @description Mobile app key (CF-201): a native app sends it with
+                 * @description Mobile app key: a native app sends it with
                  *     `X-ClickFix-App-Package` instead of a page origin; the widget's
                  *     origin allowlist is then not consulted. Unknown, revoked or
                  *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key
@@ -340,7 +340,7 @@ export interface paths {
             query?: never;
             header?: {
                 /**
-                 * @description Mobile app key (CF-201): a native app sends it with
+                 * @description Mobile app key: a native app sends it with
                  *     `X-ClickFix-App-Package` instead of a page origin; the widget's
                  *     origin allowlist is then not consulted. Unknown, revoked or
                  *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key
@@ -376,7 +376,7 @@ export interface paths {
             query?: never;
             header?: {
                 /**
-                 * @description Mobile app key (CF-201): a native app sends it with
+                 * @description Mobile app key: a native app sends it with
                  *     `X-ClickFix-App-Package` instead of a page origin; the widget's
                  *     origin allowlist is then not consulted. Unknown, revoked or
                  *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key
@@ -413,7 +413,7 @@ export interface paths {
             query?: never;
             header?: {
                 /**
-                 * @description Mobile app key (CF-201): a native app sends it with
+                 * @description Mobile app key: a native app sends it with
                  *     `X-ClickFix-App-Package` instead of a page origin; the widget's
                  *     origin allowlist is then not consulted. Unknown, revoked or
                  *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key
@@ -446,7 +446,7 @@ export interface paths {
             query?: never;
             header?: {
                 /**
-                 * @description Mobile app key (CF-201): a native app sends it with
+                 * @description Mobile app key: a native app sends it with
                  *     `X-ClickFix-App-Package` instead of a page origin; the widget's
                  *     origin allowlist is then not consulted. Unknown, revoked or
                  *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key
@@ -502,7 +502,7 @@ export interface paths {
             query?: never;
             header?: {
                 /**
-                 * @description Mobile app key (CF-201): a native app sends it with
+                 * @description Mobile app key: a native app sends it with
                  *     `X-ClickFix-App-Package` instead of a page origin; the widget's
                  *     origin allowlist is then not consulted. Unknown, revoked or
                  *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key
@@ -540,7 +540,7 @@ export interface paths {
             query?: never;
             header?: {
                 /**
-                 * @description Mobile app key (CF-201): a native app sends it with
+                 * @description Mobile app key: a native app sends it with
                  *     `X-ClickFix-App-Package` instead of a page origin; the widget's
                  *     origin allowlist is then not consulted. Unknown, revoked or
                  *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key
@@ -558,7 +558,7 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Booking entry point inside the widget (CF-138)
+         * Booking entry point inside the widget
          * @description The organization's public booking page (`/book/<org>?source=widget`)
          *     when appointments and public booking are on and at least one public
          *     type is active; otherwise `available` is false. Origin allowlist
@@ -578,7 +578,7 @@ export interface paths {
             query?: never;
             header?: {
                 /**
-                 * @description Mobile app key (CF-201): a native app sends it with
+                 * @description Mobile app key: a native app sends it with
                  *     `X-ClickFix-App-Package` instead of a page origin; the widget's
                  *     origin allowlist is then not consulted. Unknown, revoked or
                  *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key
@@ -596,7 +596,7 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Help center search inside the widget (CF-55)
+         * Help center search inside the widget
          * @description Published public knowledge articles of the widget's organization with
          *     links to the public help center. Without `q` the latest articles are
          *     returned. `available` is false when the organization has no help center.
@@ -667,7 +667,7 @@ export interface components {
         WidgetAttributesResult: {
             applied: string[];
             ignored: string[];
-            /** @description Keys no field defines (CF-196); recorded as warnings, also in `ignored`. */
+            /** @description Keys no field defines; recorded as warnings, also in `ignored`. */
             unknown: string[];
             /** @description No contact yet; send them with the first message */
             pending: boolean;
@@ -752,7 +752,7 @@ export interface components {
                 max_text_length: number;
             };
             conversations: components["schemas"]["WidgetConversation"][];
-            /** @description Start form of a new conversation (CF-52); null when none is offered. */
+            /** @description Start form of a new conversation; null when none is offered. */
             request_form?: components["schemas"]["PublicRequestForm"] | null;
         };
         WidgetBootstrapContext: {
@@ -819,8 +819,7 @@ export interface components {
             }[];
         };
         /**
-         * @description The pre-chat form is one of the organization's request forms (CF-198,
-         *     `/v1/tenant/request-forms`): `form_uuid` picks it, "" means the first
+         * @description The pre-chat form is one of the organization's request forms (`/v1/tenant/request-forms`): `form_uuid` picks it, "" means the first
          *     active form offered on the widget channel. The bootstrap serves the
          *     chosen form as `request_form`. The widget keeps only the switch, the
          *     choice and the consent box; the fields live on the form.
@@ -998,7 +997,7 @@ export interface components {
             /** Format: date-time */
             expires_at: string;
             verified: boolean;
-            /** @description The visitor's contact proved its company with a company-signed user_hash and still belongs to it (CF-206); false when the company came only as a hint */
+            /** @description The visitor's contact proved its company with a company-signed user_hash and still belongs to it; false when the company came only as a hint */
             company_verified: boolean;
             contact: null | {
                 name: string;
@@ -1067,7 +1066,7 @@ export interface components {
         WidgetIdentifyInput: {
             /** @description The user's id in your system (the contact's external id); no line breaks */
             user_id: string;
-            /** @description Computed on your server with the widget's identity secret. Without a company id: hex(HMAC-SHA256(identity_secret, user_id)). With company.id (CF-206): hex(HMAC-SHA256(identity_secret, user_id + "\n" + company_id)), so the user cannot claim another company. A user-only hash sent together with company.id still verifies the user, but the company id is then a claim: it binds no company and is not stored (name and domain stay hints). */
+            /** @description Computed on your server with the widget's identity secret. Without a company id: hex(HMAC-SHA256(identity_secret, user_id)). With company.id: hex(HMAC-SHA256(identity_secret, user_id + "\n" + company_id)), so the user cannot claim another company. A user-only hash sent together with company.id still verifies the user, but the company id is then a claim: it binds no company and is not stored (name and domain stay hints). */
             user_hash: string;
             name?: string;
             email?: string;
@@ -1125,7 +1124,7 @@ export interface components {
             email?: string;
             page_url?: string;
             profile?: components["schemas"]["WidgetProfileInput"];
-            /** @description The pre-chat (request) form answers of a first message (CF-198) */
+            /** @description The pre-chat (request) form answers of a first message */
             form?: components["schemas"]["RequestFormSubmission"];
             /** @description Visitor phone (older SDKs) */
             phone?: string;
@@ -1357,7 +1356,7 @@ export interface components {
     };
     parameters: {
         /**
-         * @description Mobile app key (CF-201): a native app sends it with
+         * @description Mobile app key: a native app sends it with
          *     `X-ClickFix-App-Package` instead of a page origin; the widget's
          *     origin allowlist is then not consulted. Unknown, revoked or
          *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key
@@ -1382,7 +1381,7 @@ export interface operations {
             query?: never;
             header?: {
                 /**
-                 * @description Mobile app key (CF-201): a native app sends it with
+                 * @description Mobile app key: a native app sends it with
                  *     `X-ClickFix-App-Package` instead of a page origin; the widget's
                  *     origin allowlist is then not consulted. Unknown, revoked or
                  *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key
@@ -1455,7 +1454,7 @@ export interface operations {
             query?: never;
             header?: {
                 /**
-                 * @description Mobile app key (CF-201): a native app sends it with
+                 * @description Mobile app key: a native app sends it with
                  *     `X-ClickFix-App-Package` instead of a page origin; the widget's
                  *     origin allowlist is then not consulted. Unknown, revoked or
                  *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key
@@ -1536,7 +1535,7 @@ export interface operations {
             query?: never;
             header?: {
                 /**
-                 * @description Mobile app key (CF-201): a native app sends it with
+                 * @description Mobile app key: a native app sends it with
                  *     `X-ClickFix-App-Package` instead of a page origin; the widget's
                  *     origin allowlist is then not consulted. Unknown, revoked or
                  *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key
@@ -1618,7 +1617,7 @@ export interface operations {
             query?: never;
             header?: {
                 /**
-                 * @description Mobile app key (CF-201): a native app sends it with
+                 * @description Mobile app key: a native app sends it with
                  *     `X-ClickFix-App-Package` instead of a page origin; the widget's
                  *     origin allowlist is then not consulted. Unknown, revoked or
                  *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key
@@ -1706,7 +1705,7 @@ export interface operations {
             query?: never;
             header?: {
                 /**
-                 * @description Mobile app key (CF-201): a native app sends it with
+                 * @description Mobile app key: a native app sends it with
                  *     `X-ClickFix-App-Package` instead of a page origin; the widget's
                  *     origin allowlist is then not consulted. Unknown, revoked or
                  *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key
@@ -1781,7 +1780,7 @@ export interface operations {
             query?: never;
             header?: {
                 /**
-                 * @description Mobile app key (CF-201): a native app sends it with
+                 * @description Mobile app key: a native app sends it with
                  *     `X-ClickFix-App-Package` instead of a page origin; the widget's
                  *     origin allowlist is then not consulted. Unknown, revoked or
                  *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key
@@ -1824,7 +1823,7 @@ export interface operations {
             query?: never;
             header?: {
                 /**
-                 * @description Mobile app key (CF-201): a native app sends it with
+                 * @description Mobile app key: a native app sends it with
                  *     `X-ClickFix-App-Package` instead of a page origin; the widget's
                  *     origin allowlist is then not consulted. Unknown, revoked or
                  *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key
@@ -1867,7 +1866,7 @@ export interface operations {
             query?: never;
             header?: {
                 /**
-                 * @description Mobile app key (CF-201): a native app sends it with
+                 * @description Mobile app key: a native app sends it with
                  *     `X-ClickFix-App-Package` instead of a page origin; the widget's
                  *     origin allowlist is then not consulted. Unknown, revoked or
                  *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key
@@ -1911,7 +1910,7 @@ export interface operations {
             query?: never;
             header?: {
                 /**
-                 * @description Mobile app key (CF-201): a native app sends it with
+                 * @description Mobile app key: a native app sends it with
                  *     `X-ClickFix-App-Package` instead of a page origin; the widget's
                  *     origin allowlist is then not consulted. Unknown, revoked or
                  *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key
@@ -1953,7 +1952,7 @@ export interface operations {
             query?: never;
             header?: {
                 /**
-                 * @description Mobile app key (CF-201): a native app sends it with
+                 * @description Mobile app key: a native app sends it with
                  *     `X-ClickFix-App-Package` instead of a page origin; the widget's
                  *     origin allowlist is then not consulted. Unknown, revoked or
                  *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key
@@ -1997,7 +1996,7 @@ export interface operations {
             query?: never;
             header?: {
                 /**
-                 * @description Mobile app key (CF-201): a native app sends it with
+                 * @description Mobile app key: a native app sends it with
                  *     `X-ClickFix-App-Package` instead of a page origin; the widget's
                  *     origin allowlist is then not consulted. Unknown, revoked or
                  *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key
@@ -2034,7 +2033,7 @@ export interface operations {
             query?: never;
             header?: {
                 /**
-                 * @description Mobile app key (CF-201): a native app sends it with
+                 * @description Mobile app key: a native app sends it with
                  *     `X-ClickFix-App-Package` instead of a page origin; the widget's
                  *     origin allowlist is then not consulted. Unknown, revoked or
                  *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key
@@ -2091,7 +2090,7 @@ export interface operations {
             };
             header?: {
                 /**
-                 * @description Mobile app key (CF-201): a native app sends it with
+                 * @description Mobile app key: a native app sends it with
                  *     `X-ClickFix-App-Package` instead of a page origin; the widget's
                  *     origin allowlist is then not consulted. Unknown, revoked or
                  *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key
@@ -2130,7 +2129,7 @@ export interface operations {
             query?: never;
             header?: {
                 /**
-                 * @description Mobile app key (CF-201): a native app sends it with
+                 * @description Mobile app key: a native app sends it with
                  *     `X-ClickFix-App-Package` instead of a page origin; the widget's
                  *     origin allowlist is then not consulted. Unknown, revoked or
                  *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key
@@ -2184,7 +2183,7 @@ export interface operations {
             query?: never;
             header?: {
                 /**
-                 * @description Mobile app key (CF-201): a native app sends it with
+                 * @description Mobile app key: a native app sends it with
                  *     `X-ClickFix-App-Package` instead of a page origin; the widget's
                  *     origin allowlist is then not consulted. Unknown, revoked or
                  *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key
@@ -2229,7 +2228,7 @@ export interface operations {
             query?: never;
             header?: {
                 /**
-                 * @description Mobile app key (CF-201): a native app sends it with
+                 * @description Mobile app key: a native app sends it with
                  *     `X-ClickFix-App-Package` instead of a page origin; the widget's
                  *     origin allowlist is then not consulted. Unknown, revoked or
                  *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key
@@ -2341,7 +2340,7 @@ export interface operations {
             query?: never;
             header?: {
                 /**
-                 * @description Mobile app key (CF-201): a native app sends it with
+                 * @description Mobile app key: a native app sends it with
                  *     `X-ClickFix-App-Package` instead of a page origin; the widget's
                  *     origin allowlist is then not consulted. Unknown, revoked or
                  *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key
@@ -2389,7 +2388,7 @@ export interface operations {
             query?: never;
             header?: {
                 /**
-                 * @description Mobile app key (CF-201): a native app sends it with
+                 * @description Mobile app key: a native app sends it with
                  *     `X-ClickFix-App-Package` instead of a page origin; the widget's
                  *     origin allowlist is then not consulted. Unknown, revoked or
                  *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key
@@ -2438,7 +2437,7 @@ export interface operations {
             };
             header?: {
                 /**
-                 * @description Mobile app key (CF-201): a native app sends it with
+                 * @description Mobile app key: a native app sends it with
                  *     `X-ClickFix-App-Package` instead of a page origin; the widget's
                  *     origin allowlist is then not consulted. Unknown, revoked or
                  *     mismatched keys answer 403 `WIDGET_APP_KEY_INVALID`, as does a key

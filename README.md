@@ -1,64 +1,67 @@
 # ClickFix SDKs
 
-MIT licensed (`LICENSE`, copied into every package). Published from the public mirror
-[ClickSolveMainTR/clickfix-sdks](https://github.com/ClickSolveMainTR/clickfix-sdks): every tagged `main`
-run pushes this directory there and tags each package version (`node/vX.Y.Z`, `go/vX.Y.Z`,
-`flutter/vX.Y.Z`, ...). The mirror is read-only; fixes land here and ship with the next release.
+Official client libraries for [ClickFix](https://getclickfix.com), the multi-tenant customer support platform.
+MIT licensed (`LICENSE`, copied into every package).
 
-- `go`: generated server client plus authentication, bounded retries, pagination and webhook verification. Module `github.com/ClickSolveMainTR/clickfix-sdks/go`, tags `go/vX.Y.Z` (version in `go/VERSION`).
-- `node`: `@getclickfix/node`, typed, tree-shakable Node 22+ fetch client and server cryptographic helpers.
-- `visitor-core`: `@getclickfix/visitor-core`, the DOM-free visitor (widget) API client for React Native, Node and browsers: browser mode (same-origin BFF) or app mode (mobile app key headers), retries, session renewal, realtime abstraction and the webview bridge types (CF-201).
-- `react-widget`: `@getclickfix/react-widget`, UI-free React 18+ hooks over `visitor-core` in browser mode.
-- `react-native`: `@getclickfix/react-native`, bare React Native (0.81+, Hermes) provider and hooks over `visitor-core` in app mode (mobile app key), `SecureStorage` adapters, deep links, and optional themeable screens under `@getclickfix/react-native/ui` (CF-202). Tests: jest with the react-native preset (`pnpm test:native`).
-- `expo`: `@getclickfix/expo`, Expo SDK 54+ wrapper of `react-native`: `ClickFixExpoProvider` with `expo-secure-store`, `expo-file-system`, `expo-linking`, `expo-constants` wired in (CF-202). Example app: `examples/react-native` (Expo 58; `expo-doctor` and `tsc` in CI).
-- `laravel`: `clickfix/laravel`, Laravel 10-13 package on top of `clickfix/sdk` (`php`): provider, facade, artisan commands, signed webhook route with Laravel events, `@clickfixWidget` Blade directive. Version is the newest `## X.Y.Z` heading in `laravel/CHANGELOG.md`; the `sdks-mirror` job pushes `laravel/` to the public repository `ClickSolveMainTR/clickfix-laravel` and tags `vX.Y.Z` there, which Packagist (`clickfix/laravel`) watches. Tests: `cd sdks/laravel && composer install && vendor/bin/phpunit` (CI runs the Testbench matrix in the `laravel` job).
-- `flutter/clickfix_webview`: `clickfix_webview` (pub.dev), Flutter webview widget + controller implementing the webview bridge contract v1 (`docs/webview-bridge.md`). Checked by the separate `flutter` CI job (`dart analyze`, `flutter test`, publish dry run); published by `sdk-publish` when the `PUB_CREDENTIALS` secret is set.
-- `examples`: the integration guide's samples (widget JS, Node, Go, PHP, curl), the Expo example app (`examples/react-native`) and the runner that verifies them (`examples/README.md`).
+| Package | Install | Runs on | What it is for |
+|---|---|---|---|
+| [`@getclickfix/node`](./node) | `npm install @getclickfix/node` | Node 22+ | Server: typed public API client, webhook verification, `user_hash` |
+| [Go module](./go) | `go get github.com/ClickSolveMainTR/clickfix-sdks/go` | Go 1.24+ | Server: generated client, retries, pagination, webhooks, `user_hash` |
+| [`clickfix/sdk`](https://github.com/ClickSolveMainTR/clickfix-php) | `composer require clickfix/sdk guzzlehttp/guzzle` | PHP 8.1+ | Server: PSR-18 client, typed errors, webhooks, `user_hash` |
+| [`clickfix/laravel`](https://github.com/ClickSolveMainTR/clickfix-laravel) | `composer require clickfix/laravel` | Laravel 10-13 | Provider, facade, artisan commands, webhook route, `@clickfixWidget` |
+| [`@getclickfix/visitor-core`](./visitor-core) | `npm install @getclickfix/visitor-core` | React Native, Node, browsers | DOM-free visitor (widget) API client and webview bridge types |
+| [`@getclickfix/react-widget`](./react-widget) | `npm install @getclickfix/react-widget` | React 18+ | Hooks for the hosted widget and a UI-free visitor client |
+| [`@getclickfix/react-native`](./react-native) | `npm install @getclickfix/react-native` | React Native 0.81+ | Provider, hooks and optional native screens (mobile app key) |
+| [`@getclickfix/expo`](./expo) | `npx expo install @getclickfix/expo` | Expo SDK 54+ | The React Native package with Expo storage, files and linking wired in |
+| [`clickfix_webview`](./flutter/clickfix_webview) | `flutter pub add clickfix_webview` | Flutter (Dart 3.10+) | Secure webview of the hosted widget, bridge contract v1 |
 
-The source of truth is `backend/docs/openapi.yaml`. `make sdks` selects only
-`/v1/public-api/*` for server clients and `/v1/widget/*` for the visitor core,
-retains referenced components transitively, and generates Go with
-[oapi-codegen v2.8.0](https://github.com/oapi-codegen/oapi-codegen/releases/tag/v2.8.0)
-and TypeScript with [openapi-typescript 7.13.0](https://openapi-ts.dev/node).
-Go and Node cover the API-key integration routes (including triggers and subscriptions);
-JWT-authenticated key administration is deliberately outside a server SDK.
-The existing API has some generic response envelopes; their payloads remain unknown
-until the canonical contract gives them a concrete schema. Do not cast unvalidated input.
+Current versions and the full walkthrough (identity verification, contacts by external id, companies,
+custom fields, events, webhooks, mobile): **https://getclickfix.com/docs/integration-guide**.
+API reference: https://getclickfix.com/docs/api-reference. Runnable example apps for every package:
+[ClickSolveMainTR/clickfix-examples](https://github.com/ClickSolveMainTR/clickfix-examples).
 
-Requires Go matching `backend/go.mod`, Node 22+ and pnpm 11.22.0; the PHP package and examples need PHP 8.1+ and Composer (the example runner skips them when `php` is missing).
+## Which package
+
+- **Your server** talks to the public API (`https://api.getclickfix.com/v1/public-api/*`) with an API key
+  and signs `user_hash` with the widget's identity secret: Node, Go, PHP or Laravel. Keys and secrets never
+  leave the server.
+- **A website** loads the hosted widget (`<script src="https://getclickfix.com/widget.js">`), or uses
+  `@getclickfix/react-widget` for typed hooks or a custom UI.
+- **A mobile app** either renders native screens with `@getclickfix/react-native` / `@getclickfix/expo`
+  (a mobile app key from Web widget → Advanced → Mobile apps), or hosts the widget page in a webview
+  (`clickfix_webview` for Flutter, the bridge helpers of `visitor-core` for React Native).
+
+`user_hash` is `hex(HMAC-SHA256(identity_secret, user_id))`, or, when the user belongs to a company,
+`hex(HMAC-SHA256(identity_secret, user_id + "\n" + company_id))` sent together with `company: { id }`.
+Every server SDK computes the same bytes.
+
+## Versions and releases
+
+Each package keeps its version next to its `CHANGELOG.md` (`package.json`, `go/VERSION`, `pubspec.yaml`, or the
+newest `## X.Y.Z` heading of the PHP and Laravel changelogs). Releases are tagged here per package
+(`node/vX.Y.Z`, `visitor-core/vX.Y.Z`, `react-widget/vX.Y.Z`, `react-native/vX.Y.Z`, `expo/vX.Y.Z`, `go/vX.Y.Z`,
+`flutter/vX.Y.Z`); the PHP and Laravel packages are tagged `vX.Y.Z` in their own repositories, which Packagist
+follows. In `0.x` a minor version may carry a breaking change; the changelog marks it **Breaking**.
+
+This repository is a read-only mirror: it is published automatically with every release, so pull requests
+here cannot be merged. Please open an [issue](https://github.com/ClickSolveMainTR/clickfix-sdks/issues) for
+bugs and missing helpers; fixes ship with the next release.
+
+## Development
+
+The generated parts (Go client, TypeScript schemas, the PHP endpoint list) come from the ClickFix OpenAPI
+contract: `/v1/public-api/*` for the server clients and `/v1/widget/*` for the visitor core, generated with
+[oapi-codegen v2.8.0](https://github.com/oapi-codegen/oapi-codegen/releases/tag/v2.8.0) and
+[openapi-typescript 7.13.0](https://openapi-ts.dev/node). Some responses still use a generic envelope
+whose `data` is untyped; decode it into your own type (`DecodeData` in Go) instead of casting unvalidated input.
+
+Requires Node 22+ and pnpm 11.22.0, Go 1.24+, PHP 8.1+ with Composer, and Flutter for `clickfix_webview`.
 
 ```sh
-make sdks
-make sdks-check                 # generated files current + guide pages current
-(cd sdks && pnpm test)          # build, type tests, Node tests, then jest for react-native and expo
-(cd sdks/go && go test -p 2 ./...)
-(cd sdks/php && composer install && composer check)   # php-cs-fixer, PHPStan 8, PHPUnit
-make guide-examples             # run the guide samples (stub API, or CLICKFIX_BASE_URL)
+pnpm install
+pnpm test                                           # build, type tests, Node tests, jest for react-native and expo
+(cd go && go test ./...)
+(cd php && composer install && composer check)      # php-cs-fixer, PHPStan level 8, PHPUnit
+(cd laravel && composer install && vendor/bin/phpunit)
+(cd flutter/clickfix_webview && flutter test)
 ```
-
-Generation is checked in a separate required CI job so generator installation does
-not slow the existing contracts job. Go SDK security and SDK dependency audits run
-in the required `security` job.
-
-## Yayın (CF-199)
-
-Versions live in each package (`node/package.json`, `visitor-core/package.json`,
-`react-widget/package.json`, `react-native/package.json`, `expo/package.json`, `go/VERSION`, the newest `php/CHANGELOG.md` entry) next to its `CHANGELOG.md`. On every
-PR the `sdks` job runs `pnpm publish --dry-run` (pnpm, so the `workspace:`
-dependencies of react-widget and react-native on visitor-core, and of expo on react-native, are rewritten to versions). On a
-green `main` the `sdk-publish` job publishes any npm version that is not on the
-registry yet, in dependency order (visitor-core, react-widget, react-native, expo)
-(needs the `NPM_TOKEN` repository secret, an npm automation token for the
-`@getclickfix` scope; without it the job skips with a note), and the `sdks-mirror`
-job pushes the tree and the `go/vX.Y.Z` tag to the public mirror when they do not exist.
-Nobody publishes or tags by hand. The PHP package (`sdks/php`, version = newest `CHANGELOG.md` entry and
-`Client::USER_AGENT`) is pushed by the same `sdks-mirror` job to the public repository
-`ClickSolveMainTR/clickfix-php` and tagged `vX.Y.Z` there; Packagist (`clickfix/sdk`) watches that
-repository. Details: `docs/entegrasyon-kilavuzu.md`.
-The Laravel package (`sdks/laravel`, version = newest `CHANGELOG.md` heading) is pushed by the same job to
-`ClickSolveMainTR/clickfix-laravel` and tagged `vX.Y.Z` there; Packagist (`clickfix/laravel`) watches it.
-
-References: existing ClickFix widget routes/types and Laravel
-`resources/js/widget/lib/widget-api.ts` for the headless transport approach;
-Rentopia `backend/internal/modules/publicapi/usecase/webhooks.go` for the timestamp.body
-HMAC format, adapted to ClickFix's existing delivery contract.

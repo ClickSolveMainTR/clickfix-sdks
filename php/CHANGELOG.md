@@ -1,15 +1,21 @@
 # clickfix/sdk
 
-Sürümleme: [SemVer](https://semver.org). `0.x` sürümlerinde küçük sürüm (`0.N`) kırıcı değişiklik taşıyabilir; her kırıcı değişiklik burada **Kırıcı** başlığıyla yazılır. Sürüm, bu dosyadaki en yeni `## X.Y.Z` başlığı ve `Client::USER_AGENT` değeridir (`composer.json`'a `version` yazılmaz). `main`'e birleşen bir değişiklikte CI'daki `sdks-mirror` işi `sdks/php`'yi [ClickSolveMainTR/clickfix-php](https://github.com/ClickSolveMainTR/clickfix-php) reposuna iter ve orada `vX.Y.Z` etiketini basar; Packagist (`clickfix/sdk`) bu repoyu izler.
+Versioning: [SemVer](https://semver.org). In `0.x` a minor version (`0.N`) may carry a breaking change; every breaking change is listed here under **Breaking**. The version is the newest `## X.Y.Z` heading of this file and `Client::USER_AGENT` (`composer.json` carries no `version`). Releases are tagged `vX.Y.Z` in [ClickSolveMainTR/clickfix-php](https://github.com/ClickSolveMainTR/clickfix-php), which Packagist follows.
+
+## 0.2.0 - 2026-11-12
+
+- `UserHash::make($secret, $userId, $companyId = null)`: with a company id the widget `user_hash` signs the user id and the company id together (`hex(HMAC-SHA256(secret, user_id . "\n" . company_id))`); send it with `company: { id }` in `identify` and the widget reports `company_verified: true`. Without one the result is unchanged.
+- `UserHash::forCompany($secret, $userId, $companyId)`: the same, with both ids required; an empty id or a line break throws `InvalidArgumentException`.
+- Same bytes as `identityHash` in `@getclickfix/node` and `IdentityCompanyHash` in the Go module (cross-SDK test vectors).
 
 ## 0.1.0 - 2026-11-12
 
-İlk yayın (CF-204).
+First release.
 
-- `ClickFix\Client`: PSR-18 istemci + PSR-17 fabrikalar (`php-http/discovery`), Bearer anahtar, JSON zarf çözümü, `Idempotency-Key` (verilmezse üretilir), GET ve anahtarlı yazmalarda sınırlı tekrar deneme (varsayılan 3, en çok 5; üstel bekleme, `Retry-After`).
-- Kaynak sınıfları: `contacts()`, `companies()`, `customFields()`, `conversations()`, `events()`, `webhooks()`, `triggers()`; `Page` ve `Paginator` ile ofset sayfalama.
-- Tipli hatalar: `AuthenticationException` (401), `ForbiddenException` (403), `NotFoundException` (404), `ConflictException` (409), `ValidationException` (400/422), `RateLimitException` (429), `ServerException` (5xx), `TransportException`.
-- `ClickFix\UserHash::make`: widget `user_hash` değeri (sunucuda); Node/Go ile aynı.
-- `ClickFix\Webhooks::verify`: `ClickFix-Webhook-*` imzasını ham gövde üzerinde doğrular (5 dk tolerans); Node/Go ile aynı.
-- `ClickFix\ApiChannel`: API kanalına kanal imza anahtarıyla mesaj gönderir.
-- `ClickFix\Endpoints`: `public-api.yaml`'dan üretilen uç listesi; `make sdks-check` ve `EndpointsTest` kaynak sınıflarını buna karşı denetler.
+- `ClickFix\Client`: PSR-18 client and PSR-17 factories (`php-http/discovery`), Bearer key, JSON envelope decoding, `Idempotency-Key` (generated when not given), bounded retries for GET and keyed writes (3 attempts by default, at most 5; exponential backoff, `Retry-After`).
+- Resources: `contacts()`, `companies()`, `customFields()`, `conversations()`, `events()`, `webhooks()`, `triggers()`; offset pagination with `Page` and `Paginator`.
+- Typed errors: `AuthenticationException` (401), `ForbiddenException` (403), `NotFoundException` (404), `ConflictException` (409), `ValidationException` (400/422), `RateLimitException` (429), `ServerException` (5xx), `TransportException`.
+- `ClickFix\UserHash::make`: the widget `user_hash` (server side), same bytes as Node and Go.
+- `ClickFix\Webhooks::verify`: checks the `ClickFix-Webhook-*` signature over the raw body (5 minute tolerance), same as Node and Go.
+- `ClickFix\ApiChannel`: sends messages to an API channel with the channel signing secret.
+- `ClickFix\Endpoints`: the endpoint list generated from the public API spec; `EndpointsTest` checks the resource classes against it.

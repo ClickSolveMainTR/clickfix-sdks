@@ -33,12 +33,25 @@ final class Identity
                 }
                 $value = data_get($user, $path);
                 if ($value !== null && $value !== '') {
-                    $identity[$field] = is_scalar($value) ? (string) $value : $value;
+                    // A dotted field ("company.id") builds the nested identify payload.
+                    data_set($identity, (string) $field, is_scalar($value) ? (string) $value : $value);
                 }
             }
         }
 
         return $identity;
+    }
+
+    /** The company id identify() sends as company.id, or null when the payload has none. */
+    public static function companyIdOf(array $identity): ?string
+    {
+        $id = $identity['company']['id'] ?? null;
+        if ($id === null || (!is_scalar($id) && !$id instanceof \Stringable)) {
+            return null;
+        }
+        $id = trim((string) $id);
+
+        return $id === '' ? null : $id;
     }
 
     public static function idOf(mixed $user): string

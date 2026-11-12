@@ -1,4 +1,4 @@
-// ClickFixProvider (CF-202): one visitor client per app, the token in the
+// ClickFixProvider: one visitor client per app, the token in the
 // keystore adapter you pass, realtime over React Native's WebSocket, and a
 // foreground hook so lists refresh when the app comes back.
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';

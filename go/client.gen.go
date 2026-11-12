@@ -444,7 +444,7 @@ type CompanyEventInput struct {
 	Source         *string                 `json:"source,omitempty"`
 }
 
-// CompanyRevenue What the customer pays the organization (CF-86). Amounts are minor units of `currency`.
+// CompanyRevenue What the customer pays the organization. Amounts are minor units of `currency`.
 type CompanyRevenue struct {
 	BillingStatus      CompanyRevenueBillingStatus `json:"billing_status"`
 	Currency           string                      `json:"currency"`
@@ -504,11 +504,11 @@ type Contact struct {
 	CustomFields      map[string]interface{} `json:"custom_fields"`
 	Email             *string                `json:"email"`
 
-	// ExternalId CF-195: the customer's own user id, unique in the organization.
+	// ExternalId The customer's own user id, unique in the organization.
 	ExternalId *string            `json:"external_id"`
 	Identities *[]ContactIdentity `json:"identities,omitempty"`
 
-	// IdentityState CF-195. verified: the contact proved the customer's user id with
+	// IdentityState Verified: the contact proved the customer's user id with
 	// user_hash (widget identify). anonymous: no name, e-mail or phone.
 	// self_named: a name, e-mail or phone the contact or its channel gave,
 	// not proved.
@@ -539,7 +539,7 @@ type ContactIdentity struct {
 	Username    string              `json:"username"`
 }
 
-// ContactIdentityState CF-195. verified: the contact proved the customer's user id with
+// ContactIdentityState Verified: the contact proved the customer's user id with
 // user_hash (widget identify). anonymous: no name, e-mail or phone.
 // self_named: a name, e-mail or phone the contact or its channel gave,
 // not proved.
@@ -552,7 +552,7 @@ type ContactInput struct {
 	CustomFields *map[string]interface{} `json:"custom_fields,omitempty"`
 	Email        *string                 `json:"email,omitempty"`
 
-	// ExternalId CF-195: the customer's own user id; empty clears it. 409 EXTERNAL_ID_EXISTS when another contact has it.
+	// ExternalId The customer's own user id; empty clears it. 409 EXTERNAL_ID_EXISTS when another contact has it.
 	ExternalId *string `json:"external_id,omitempty"`
 	JobTitle   *string `json:"job_title,omitempty"`
 	Locale     *string `json:"locale,omitempty"`
@@ -595,7 +595,7 @@ type EnvelopeCompanyRevenueUpsert struct {
 	Data struct {
 		CompanyUuid openapi_types.UUID `json:"company_uuid"`
 
-		// Revenue What the customer pays the organization (CF-86). Amounts are minor units of `currency`.
+		// Revenue What the customer pays the organization. Amounts are minor units of `currency`.
 		Revenue CompanyRevenue `json:"revenue"`
 	} `json:"data"`
 	Meta    ResponseMeta                        `json:"meta"`
@@ -669,7 +669,7 @@ type IntegrationContactUpdate struct {
 	Phone *string `json:"phone,omitempty"`
 }
 
-// IntegrationCreateConversation Name the contact by contact_uuid or contact_external_id (CF-195, the customer's own user id), not both. On a widget inbox a contact with an external id gets its widget identity, so the agent can write first and the signed-in user finds the conversation on the site.
+// IntegrationCreateConversation Name the contact by contact_uuid or contact_external_id (the customer's own user id), not both. On a widget inbox a contact with an external id gets its widget identity, so the agent can write first and the signed-in user finds the conversation on the site.
 type IntegrationCreateConversation struct {
 	ContactExternalId *string             `json:"contact_external_id,omitempty"`
 	ContactUuid       *openapi_types.UUID `json:"contact_uuid,omitempty"`
@@ -754,7 +754,7 @@ type GetV1PublicApiCompaniesParams struct {
 	Limit  *int `form:"limit,omitempty" json:"limit,omitempty"`
 	Offset *int `form:"offset,omitempty" json:"offset,omitempty"`
 
-	// ExternalId CF-195: the company's id in your system, exact match.
+	// ExternalId The company's id in your system, exact match.
 	ExternalId *string `form:"external_id,omitempty" json:"external_id,omitempty"`
 }
 
@@ -781,7 +781,7 @@ type GetV1PublicApiContactsParams struct {
 	// Q Case-insensitive match on the contact name or e-mail.
 	Q *string `form:"q,omitempty" json:"q,omitempty"`
 
-	// ExternalId CF-195: the customer's own user id, exact match.
+	// ExternalId The customer's own user id, exact match.
 	ExternalId *string `form:"external_id,omitempty" json:"external_id,omitempty"`
 }
 
@@ -796,15 +796,13 @@ type PutV1PublicApiContactByExternalIdJSONBody struct {
 	Company      *openapi_types.UUID     `json:"company,omitempty"`
 	CustomFields *map[string]interface{} `json:"custom_fields,omitempty"`
 	Email        *string                 `json:"email,omitempty"`
-
-	// ExternalId CF-195: the customer's own user id; empty clears it. 409 EXTERNAL_ID_EXISTS when another contact has it.
-	ExternalId string  `json:"external_id"`
-	JobTitle   *string `json:"job_title,omitempty"`
-	Locale     *string `json:"locale,omitempty"`
-	Name       *string `json:"name,omitempty"`
-	Notes      *string `json:"notes,omitempty"`
-	Phone      *string `json:"phone,omitempty"`
-	Timezone   *string `json:"timezone,omitempty"`
+	ExternalId   string                  `json:"external_id"`
+	JobTitle     *string                 `json:"job_title,omitempty"`
+	Locale       *string                 `json:"locale,omitempty"`
+	Name         *string                 `json:"name,omitempty"`
+	Notes        *string                 `json:"notes,omitempty"`
+	Phone        *string                 `json:"phone,omitempty"`
+	Timezone     *string                 `json:"timezone,omitempty"`
 }
 
 // PutV1PublicApiContactByExternalIdParams defines parameters for PutV1PublicApiContactByExternalId.
@@ -1012,12 +1010,12 @@ type ClientInterface interface {
 
 	// GetV1PublicApiCompanies Public API: get companies
 	//
-	// API key scope (`companies:read`) and the key creator's current permissions both apply. Items carry `domain` and `external_id`, the company's own id (CF-195, separate from contact ids).
+	// API key scope (`companies:read`) and the key creator's current permissions both apply. Items carry `domain` and `external_id`, the company's own id (separate from contact ids).
 	//
 	// Corresponds with GET /v1/public-api/companies (the `GetV1PublicApiCompanies` operationId).
 	GetV1PublicApiCompanies(ctx context.Context, params *GetV1PublicApiCompaniesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PostV1PublicApiCompanyEventWithBody Public API: send an in-product event to a company timeline (CF-85)
+	// PostV1PublicApiCompanyEventWithBody Public API: send an in-product event to a company timeline
 	//
 	// Same body and response as `POST /v1/tenant/company-events`. Needs the `events:write` key scope and an `Idempotency-Key` header.
 	//
@@ -1026,7 +1024,7 @@ type ClientInterface interface {
 	// Corresponds with POST /v1/public-api/company-events (the `PostV1PublicApiCompanyEvent` operationId).
 	PostV1PublicApiCompanyEventWithBody(ctx context.Context, params *PostV1PublicApiCompanyEventParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PostV1PublicApiCompanyEvent Public API: send an in-product event to a company timeline (CF-85)
+	// PostV1PublicApiCompanyEvent Public API: send an in-product event to a company timeline
 	//
 	// Same body and response as `POST /v1/tenant/company-events`. Needs the `events:write` key scope and an `Idempotency-Key` header.
 	//
@@ -1035,7 +1033,7 @@ type ClientInterface interface {
 	// Corresponds with POST /v1/public-api/company-events (the `PostV1PublicApiCompanyEvent` operationId).
 	PostV1PublicApiCompanyEvent(ctx context.Context, params *PostV1PublicApiCompanyEventParams, body PostV1PublicApiCompanyEventJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PutV1PublicApiCompanyRevenueWithBody Public API: push a customer's revenue (CF-86)
+	// PutV1PublicApiCompanyRevenueWithBody Public API: push a customer's revenue
 	//
 	// Same body and response as `PUT /v1/tenant/company-revenue`. Needs the `revenue:write` key scope and an `Idempotency-Key` header; a reused key with a different body returns 409.
 	//
@@ -1044,7 +1042,7 @@ type ClientInterface interface {
 	// Corresponds with PUT /v1/public-api/company-revenue (the `PutV1PublicApiCompanyRevenue` operationId).
 	PutV1PublicApiCompanyRevenueWithBody(ctx context.Context, params *PutV1PublicApiCompanyRevenueParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PutV1PublicApiCompanyRevenue Public API: push a customer's revenue (CF-86)
+	// PutV1PublicApiCompanyRevenue Public API: push a customer's revenue
 	//
 	// Same body and response as `PUT /v1/tenant/company-revenue`. Needs the `revenue:write` key scope and an `Idempotency-Key` header; a reused key with a different body returns 409.
 	//
@@ -1053,7 +1051,7 @@ type ClientInterface interface {
 	// Corresponds with PUT /v1/public-api/company-revenue (the `PutV1PublicApiCompanyRevenue` operationId).
 	PutV1PublicApiCompanyRevenue(ctx context.Context, params *PutV1PublicApiCompanyRevenueParams, body PutV1PublicApiCompanyRevenueJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PutV1PublicApiCompanyUsageWithBody Public API: report a customer's product usage (CF-87)
+	// PutV1PublicApiCompanyUsageWithBody Public API: report a customer's product usage
 	//
 	// Same body and response as `PUT /v1/tenant/company-usage`. Needs the `health:write` key scope and an `Idempotency-Key` header.
 	//
@@ -1062,7 +1060,7 @@ type ClientInterface interface {
 	// Corresponds with PUT /v1/public-api/company-usage (the `PutV1PublicApiCompanyUsage` operationId).
 	PutV1PublicApiCompanyUsageWithBody(ctx context.Context, params *PutV1PublicApiCompanyUsageParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PutV1PublicApiCompanyUsage Public API: report a customer's product usage (CF-87)
+	// PutV1PublicApiCompanyUsage Public API: report a customer's product usage
 	//
 	// Same body and response as `PUT /v1/tenant/company-usage`. Needs the `health:write` key scope and an `Idempotency-Key` header.
 	//
@@ -1073,12 +1071,12 @@ type ClientInterface interface {
 
 	// GetV1PublicApiContacts Public API: get contacts
 	//
-	// API key scope (`contacts:read`) and the key creator's current permissions both apply. Per-key requests/minute limit. Same response envelope and pagination as tenant API. Items carry `external_id`, `verified_at` and the company's `company_external_id` (CF-195).
+	// API key scope (`contacts:read`) and the key creator's current permissions both apply. Per-key requests/minute limit. Same response envelope and pagination as tenant API. Items carry `external_id`, `verified_at` and the company's `company_external_id`.
 	//
 	// Corresponds with GET /v1/public-api/contacts (the `GetV1PublicApiContacts` operationId).
 	GetV1PublicApiContacts(ctx context.Context, params *GetV1PublicApiContactsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PostV1PublicApiContactsWithBody Public API: create a contact (CF-195)
+	// PostV1PublicApiContactsWithBody Public API: create a contact
 	//
 	// Same body and response as `POST /v1/tenant/contacts`. Needs the `contacts:write` key scope, the key creator's `tenant.contacts.write` permission and an `Idempotency-Key` header. Prefer `PUT /v1/public-api/contacts/by-external-id` to sync users from your system.
 	//
@@ -1087,7 +1085,7 @@ type ClientInterface interface {
 	// Corresponds with POST /v1/public-api/contacts (the `PostV1PublicApiContacts` operationId).
 	PostV1PublicApiContactsWithBody(ctx context.Context, params *PostV1PublicApiContactsParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PostV1PublicApiContacts Public API: create a contact (CF-195)
+	// PostV1PublicApiContacts Public API: create a contact
 	//
 	// Same body and response as `POST /v1/tenant/contacts`. Needs the `contacts:write` key scope, the key creator's `tenant.contacts.write` permission and an `Idempotency-Key` header. Prefer `PUT /v1/public-api/contacts/by-external-id` to sync users from your system.
 	//
@@ -1096,7 +1094,7 @@ type ClientInterface interface {
 	// Corresponds with POST /v1/public-api/contacts (the `PostV1PublicApiContacts` operationId).
 	PostV1PublicApiContacts(ctx context.Context, params *PostV1PublicApiContactsParams, body PostV1PublicApiContactsJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PutV1PublicApiContactByExternalIdWithBody Public API: create or update a contact by your user id (CF-195)
+	// PutV1PublicApiContactByExternalIdWithBody Public API: create or update a contact by your user id
 	//
 	// Same body and response as `PUT /v1/tenant/contacts/by-external-id`: 201 when created, 200 when the contact with `external_id` existed; the same id twice edits one contact. Needs the `contacts:write` key scope, the key creator's `tenant.contacts.write` permission and an `Idempotency-Key` header (use a new key per change; a reused key replays the stored answer).
 	//
@@ -1105,7 +1103,7 @@ type ClientInterface interface {
 	// Corresponds with PUT /v1/public-api/contacts/by-external-id (the `PutV1PublicApiContactByExternalId` operationId).
 	PutV1PublicApiContactByExternalIdWithBody(ctx context.Context, params *PutV1PublicApiContactByExternalIdParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PutV1PublicApiContactByExternalId Public API: create or update a contact by your user id (CF-195)
+	// PutV1PublicApiContactByExternalId Public API: create or update a contact by your user id
 	//
 	// Same body and response as `PUT /v1/tenant/contacts/by-external-id`: 201 when created, 200 when the contact with `external_id` existed; the same id twice edits one contact. Needs the `contacts:write` key scope, the key creator's `tenant.contacts.write` permission and an `Idempotency-Key` header (use a new key per change; a reused key replays the stored answer).
 	//
@@ -1292,7 +1290,7 @@ type ClientInterface interface {
 
 // GetV1PublicApiCompanies Public API: get companies
 //
-// API key scope (`companies:read`) and the key creator's current permissions both apply. Items carry `domain` and `external_id`, the company's own id (CF-195, separate from contact ids).
+// API key scope (`companies:read`) and the key creator's current permissions both apply. Items carry `domain` and `external_id`, the company's own id (separate from contact ids).
 //
 // Corresponds with GET /v1/public-api/companies (the `GetV1PublicApiCompanies` operationId).
 func (c *Client) GetV1PublicApiCompanies(ctx context.Context, params *GetV1PublicApiCompaniesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -1307,7 +1305,7 @@ func (c *Client) GetV1PublicApiCompanies(ctx context.Context, params *GetV1Publi
 	return c.Client.Do(req)
 }
 
-// PostV1PublicApiCompanyEventWithBody Public API: send an in-product event to a company timeline (CF-85)
+// PostV1PublicApiCompanyEventWithBody Public API: send an in-product event to a company timeline
 //
 // Same body and response as `POST /v1/tenant/company-events`. Needs the `events:write` key scope and an `Idempotency-Key` header.
 //
@@ -1326,7 +1324,7 @@ func (c *Client) PostV1PublicApiCompanyEventWithBody(ctx context.Context, params
 	return c.Client.Do(req)
 }
 
-// PostV1PublicApiCompanyEvent Public API: send an in-product event to a company timeline (CF-85)
+// PostV1PublicApiCompanyEvent Public API: send an in-product event to a company timeline
 //
 // Same body and response as `POST /v1/tenant/company-events`. Needs the `events:write` key scope and an `Idempotency-Key` header.
 //
@@ -1345,7 +1343,7 @@ func (c *Client) PostV1PublicApiCompanyEvent(ctx context.Context, params *PostV1
 	return c.Client.Do(req)
 }
 
-// PutV1PublicApiCompanyRevenueWithBody Public API: push a customer's revenue (CF-86)
+// PutV1PublicApiCompanyRevenueWithBody Public API: push a customer's revenue
 //
 // Same body and response as `PUT /v1/tenant/company-revenue`. Needs the `revenue:write` key scope and an `Idempotency-Key` header; a reused key with a different body returns 409.
 //
@@ -1364,7 +1362,7 @@ func (c *Client) PutV1PublicApiCompanyRevenueWithBody(ctx context.Context, param
 	return c.Client.Do(req)
 }
 
-// PutV1PublicApiCompanyRevenue Public API: push a customer's revenue (CF-86)
+// PutV1PublicApiCompanyRevenue Public API: push a customer's revenue
 //
 // Same body and response as `PUT /v1/tenant/company-revenue`. Needs the `revenue:write` key scope and an `Idempotency-Key` header; a reused key with a different body returns 409.
 //
@@ -1383,7 +1381,7 @@ func (c *Client) PutV1PublicApiCompanyRevenue(ctx context.Context, params *PutV1
 	return c.Client.Do(req)
 }
 
-// PutV1PublicApiCompanyUsageWithBody Public API: report a customer's product usage (CF-87)
+// PutV1PublicApiCompanyUsageWithBody Public API: report a customer's product usage
 //
 // Same body and response as `PUT /v1/tenant/company-usage`. Needs the `health:write` key scope and an `Idempotency-Key` header.
 //
@@ -1402,7 +1400,7 @@ func (c *Client) PutV1PublicApiCompanyUsageWithBody(ctx context.Context, params 
 	return c.Client.Do(req)
 }
 
-// PutV1PublicApiCompanyUsage Public API: report a customer's product usage (CF-87)
+// PutV1PublicApiCompanyUsage Public API: report a customer's product usage
 //
 // Same body and response as `PUT /v1/tenant/company-usage`. Needs the `health:write` key scope and an `Idempotency-Key` header.
 //
@@ -1423,7 +1421,7 @@ func (c *Client) PutV1PublicApiCompanyUsage(ctx context.Context, params *PutV1Pu
 
 // GetV1PublicApiContacts Public API: get contacts
 //
-// API key scope (`contacts:read`) and the key creator's current permissions both apply. Per-key requests/minute limit. Same response envelope and pagination as tenant API. Items carry `external_id`, `verified_at` and the company's `company_external_id` (CF-195).
+// API key scope (`contacts:read`) and the key creator's current permissions both apply. Per-key requests/minute limit. Same response envelope and pagination as tenant API. Items carry `external_id`, `verified_at` and the company's `company_external_id`.
 //
 // Corresponds with GET /v1/public-api/contacts (the `GetV1PublicApiContacts` operationId).
 func (c *Client) GetV1PublicApiContacts(ctx context.Context, params *GetV1PublicApiContactsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -1438,7 +1436,7 @@ func (c *Client) GetV1PublicApiContacts(ctx context.Context, params *GetV1Public
 	return c.Client.Do(req)
 }
 
-// PostV1PublicApiContactsWithBody Public API: create a contact (CF-195)
+// PostV1PublicApiContactsWithBody Public API: create a contact
 //
 // Same body and response as `POST /v1/tenant/contacts`. Needs the `contacts:write` key scope, the key creator's `tenant.contacts.write` permission and an `Idempotency-Key` header. Prefer `PUT /v1/public-api/contacts/by-external-id` to sync users from your system.
 //
@@ -1457,7 +1455,7 @@ func (c *Client) PostV1PublicApiContactsWithBody(ctx context.Context, params *Po
 	return c.Client.Do(req)
 }
 
-// PostV1PublicApiContacts Public API: create a contact (CF-195)
+// PostV1PublicApiContacts Public API: create a contact
 //
 // Same body and response as `POST /v1/tenant/contacts`. Needs the `contacts:write` key scope, the key creator's `tenant.contacts.write` permission and an `Idempotency-Key` header. Prefer `PUT /v1/public-api/contacts/by-external-id` to sync users from your system.
 //
@@ -1476,7 +1474,7 @@ func (c *Client) PostV1PublicApiContacts(ctx context.Context, params *PostV1Publ
 	return c.Client.Do(req)
 }
 
-// PutV1PublicApiContactByExternalIdWithBody Public API: create or update a contact by your user id (CF-195)
+// PutV1PublicApiContactByExternalIdWithBody Public API: create or update a contact by your user id
 //
 // Same body and response as `PUT /v1/tenant/contacts/by-external-id`: 201 when created, 200 when the contact with `external_id` existed; the same id twice edits one contact. Needs the `contacts:write` key scope, the key creator's `tenant.contacts.write` permission and an `Idempotency-Key` header (use a new key per change; a reused key replays the stored answer).
 //
@@ -1495,7 +1493,7 @@ func (c *Client) PutV1PublicApiContactByExternalIdWithBody(ctx context.Context, 
 	return c.Client.Do(req)
 }
 
-// PutV1PublicApiContactByExternalId Public API: create or update a contact by your user id (CF-195)
+// PutV1PublicApiContactByExternalId Public API: create or update a contact by your user id
 //
 // Same body and response as `PUT /v1/tenant/contacts/by-external-id`: 201 when created, 200 when the contact with `external_id` existed; the same id twice edits one contact. Needs the `contacts:write` key scope, the key creator's `tenant.contacts.write` permission and an `Idempotency-Key` header (use a new key per change; a reused key replays the stored answer).
 //
@@ -3133,14 +3131,14 @@ type ClientWithResponsesInterface interface {
 
 	// GetV1PublicApiCompaniesWithResponse Public API: get companies
 	//
-	// API key scope (`companies:read`) and the key creator's current permissions both apply. Items carry `domain` and `external_id`, the company's own id (CF-195, separate from contact ids).
+	// API key scope (`companies:read`) and the key creator's current permissions both apply. Items carry `domain` and `external_id`, the company's own id (separate from contact ids).
 	//
 	// Returns a wrapper object for the known response body format(s).
 	//
 	// Corresponds with GET /v1/public-api/companies (the `GetV1PublicApiCompanies` operationId).
 	GetV1PublicApiCompaniesWithResponse(ctx context.Context, params *GetV1PublicApiCompaniesParams, reqEditors ...RequestEditorFn) (*GetV1PublicApiCompaniesResponse, error)
 
-	// PostV1PublicApiCompanyEventWithBodyWithResponse Public API: send an in-product event to a company timeline (CF-85)
+	// PostV1PublicApiCompanyEventWithBodyWithResponse Public API: send an in-product event to a company timeline
 	//
 	// Same body and response as `POST /v1/tenant/company-events`. Needs the `events:write` key scope and an `Idempotency-Key` header.
 	//
@@ -3149,7 +3147,7 @@ type ClientWithResponsesInterface interface {
 	// Corresponds with POST /v1/public-api/company-events (the `PostV1PublicApiCompanyEvent` operationId).
 	PostV1PublicApiCompanyEventWithBodyWithResponse(ctx context.Context, params *PostV1PublicApiCompanyEventParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostV1PublicApiCompanyEventResponse, error)
 
-	// PostV1PublicApiCompanyEventWithResponse Public API: send an in-product event to a company timeline (CF-85)
+	// PostV1PublicApiCompanyEventWithResponse Public API: send an in-product event to a company timeline
 	//
 	// Same body and response as `POST /v1/tenant/company-events`. Needs the `events:write` key scope and an `Idempotency-Key` header.
 	//
@@ -3158,7 +3156,7 @@ type ClientWithResponsesInterface interface {
 	// Corresponds with POST /v1/public-api/company-events (the `PostV1PublicApiCompanyEvent` operationId).
 	PostV1PublicApiCompanyEventWithResponse(ctx context.Context, params *PostV1PublicApiCompanyEventParams, body PostV1PublicApiCompanyEventJSONRequestBody, reqEditors ...RequestEditorFn) (*PostV1PublicApiCompanyEventResponse, error)
 
-	// PutV1PublicApiCompanyRevenueWithBodyWithResponse Public API: push a customer's revenue (CF-86)
+	// PutV1PublicApiCompanyRevenueWithBodyWithResponse Public API: push a customer's revenue
 	//
 	// Same body and response as `PUT /v1/tenant/company-revenue`. Needs the `revenue:write` key scope and an `Idempotency-Key` header; a reused key with a different body returns 409.
 	//
@@ -3167,7 +3165,7 @@ type ClientWithResponsesInterface interface {
 	// Corresponds with PUT /v1/public-api/company-revenue (the `PutV1PublicApiCompanyRevenue` operationId).
 	PutV1PublicApiCompanyRevenueWithBodyWithResponse(ctx context.Context, params *PutV1PublicApiCompanyRevenueParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PutV1PublicApiCompanyRevenueResponse, error)
 
-	// PutV1PublicApiCompanyRevenueWithResponse Public API: push a customer's revenue (CF-86)
+	// PutV1PublicApiCompanyRevenueWithResponse Public API: push a customer's revenue
 	//
 	// Same body and response as `PUT /v1/tenant/company-revenue`. Needs the `revenue:write` key scope and an `Idempotency-Key` header; a reused key with a different body returns 409.
 	//
@@ -3176,7 +3174,7 @@ type ClientWithResponsesInterface interface {
 	// Corresponds with PUT /v1/public-api/company-revenue (the `PutV1PublicApiCompanyRevenue` operationId).
 	PutV1PublicApiCompanyRevenueWithResponse(ctx context.Context, params *PutV1PublicApiCompanyRevenueParams, body PutV1PublicApiCompanyRevenueJSONRequestBody, reqEditors ...RequestEditorFn) (*PutV1PublicApiCompanyRevenueResponse, error)
 
-	// PutV1PublicApiCompanyUsageWithBodyWithResponse Public API: report a customer's product usage (CF-87)
+	// PutV1PublicApiCompanyUsageWithBodyWithResponse Public API: report a customer's product usage
 	//
 	// Same body and response as `PUT /v1/tenant/company-usage`. Needs the `health:write` key scope and an `Idempotency-Key` header.
 	//
@@ -3185,7 +3183,7 @@ type ClientWithResponsesInterface interface {
 	// Corresponds with PUT /v1/public-api/company-usage (the `PutV1PublicApiCompanyUsage` operationId).
 	PutV1PublicApiCompanyUsageWithBodyWithResponse(ctx context.Context, params *PutV1PublicApiCompanyUsageParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PutV1PublicApiCompanyUsageResponse, error)
 
-	// PutV1PublicApiCompanyUsageWithResponse Public API: report a customer's product usage (CF-87)
+	// PutV1PublicApiCompanyUsageWithResponse Public API: report a customer's product usage
 	//
 	// Same body and response as `PUT /v1/tenant/company-usage`. Needs the `health:write` key scope and an `Idempotency-Key` header.
 	//
@@ -3196,14 +3194,14 @@ type ClientWithResponsesInterface interface {
 
 	// GetV1PublicApiContactsWithResponse Public API: get contacts
 	//
-	// API key scope (`contacts:read`) and the key creator's current permissions both apply. Per-key requests/minute limit. Same response envelope and pagination as tenant API. Items carry `external_id`, `verified_at` and the company's `company_external_id` (CF-195).
+	// API key scope (`contacts:read`) and the key creator's current permissions both apply. Per-key requests/minute limit. Same response envelope and pagination as tenant API. Items carry `external_id`, `verified_at` and the company's `company_external_id`.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	//
 	// Corresponds with GET /v1/public-api/contacts (the `GetV1PublicApiContacts` operationId).
 	GetV1PublicApiContactsWithResponse(ctx context.Context, params *GetV1PublicApiContactsParams, reqEditors ...RequestEditorFn) (*GetV1PublicApiContactsResponse, error)
 
-	// PostV1PublicApiContactsWithBodyWithResponse Public API: create a contact (CF-195)
+	// PostV1PublicApiContactsWithBodyWithResponse Public API: create a contact
 	//
 	// Same body and response as `POST /v1/tenant/contacts`. Needs the `contacts:write` key scope, the key creator's `tenant.contacts.write` permission and an `Idempotency-Key` header. Prefer `PUT /v1/public-api/contacts/by-external-id` to sync users from your system.
 	//
@@ -3212,7 +3210,7 @@ type ClientWithResponsesInterface interface {
 	// Corresponds with POST /v1/public-api/contacts (the `PostV1PublicApiContacts` operationId).
 	PostV1PublicApiContactsWithBodyWithResponse(ctx context.Context, params *PostV1PublicApiContactsParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostV1PublicApiContactsResponse, error)
 
-	// PostV1PublicApiContactsWithResponse Public API: create a contact (CF-195)
+	// PostV1PublicApiContactsWithResponse Public API: create a contact
 	//
 	// Same body and response as `POST /v1/tenant/contacts`. Needs the `contacts:write` key scope, the key creator's `tenant.contacts.write` permission and an `Idempotency-Key` header. Prefer `PUT /v1/public-api/contacts/by-external-id` to sync users from your system.
 	//
@@ -3221,7 +3219,7 @@ type ClientWithResponsesInterface interface {
 	// Corresponds with POST /v1/public-api/contacts (the `PostV1PublicApiContacts` operationId).
 	PostV1PublicApiContactsWithResponse(ctx context.Context, params *PostV1PublicApiContactsParams, body PostV1PublicApiContactsJSONRequestBody, reqEditors ...RequestEditorFn) (*PostV1PublicApiContactsResponse, error)
 
-	// PutV1PublicApiContactByExternalIdWithBodyWithResponse Public API: create or update a contact by your user id (CF-195)
+	// PutV1PublicApiContactByExternalIdWithBodyWithResponse Public API: create or update a contact by your user id
 	//
 	// Same body and response as `PUT /v1/tenant/contacts/by-external-id`: 201 when created, 200 when the contact with `external_id` existed; the same id twice edits one contact. Needs the `contacts:write` key scope, the key creator's `tenant.contacts.write` permission and an `Idempotency-Key` header (use a new key per change; a reused key replays the stored answer).
 	//
@@ -3230,7 +3228,7 @@ type ClientWithResponsesInterface interface {
 	// Corresponds with PUT /v1/public-api/contacts/by-external-id (the `PutV1PublicApiContactByExternalId` operationId).
 	PutV1PublicApiContactByExternalIdWithBodyWithResponse(ctx context.Context, params *PutV1PublicApiContactByExternalIdParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PutV1PublicApiContactByExternalIdResponse, error)
 
-	// PutV1PublicApiContactByExternalIdWithResponse Public API: create or update a contact by your user id (CF-195)
+	// PutV1PublicApiContactByExternalIdWithResponse Public API: create or update a contact by your user id
 	//
 	// Same body and response as `PUT /v1/tenant/contacts/by-external-id`: 201 when created, 200 when the contact with `external_id` existed; the same id twice edits one contact. Needs the `contacts:write` key scope, the key creator's `tenant.contacts.write` permission and an `Idempotency-Key` header (use a new key per change; a reused key replays the stored answer).
 	//
@@ -4918,7 +4916,7 @@ func (r PutV1PublicApiWebhooksUuidResponse) ContentType() string {
 
 // GetV1PublicApiCompaniesWithResponse Public API: get companies
 //
-// API key scope (`companies:read`) and the key creator's current permissions both apply. Items carry `domain` and `external_id`, the company's own id (CF-195, separate from contact ids).
+// API key scope (`companies:read`) and the key creator's current permissions both apply. Items carry `domain` and `external_id`, the company's own id (separate from contact ids).
 //
 // Returns a wrapper object for the known response body format(s).
 //
@@ -4931,7 +4929,7 @@ func (c *ClientWithResponses) GetV1PublicApiCompaniesWithResponse(ctx context.Co
 	return ParseGetV1PublicApiCompaniesResponse(rsp)
 }
 
-// PostV1PublicApiCompanyEventWithBodyWithResponse Public API: send an in-product event to a company timeline (CF-85)
+// PostV1PublicApiCompanyEventWithBodyWithResponse Public API: send an in-product event to a company timeline
 //
 // Same body and response as `POST /v1/tenant/company-events`. Needs the `events:write` key scope and an `Idempotency-Key` header.
 //
@@ -4946,7 +4944,7 @@ func (c *ClientWithResponses) PostV1PublicApiCompanyEventWithBodyWithResponse(ct
 	return ParsePostV1PublicApiCompanyEventResponse(rsp)
 }
 
-// PostV1PublicApiCompanyEventWithResponse Public API: send an in-product event to a company timeline (CF-85)
+// PostV1PublicApiCompanyEventWithResponse Public API: send an in-product event to a company timeline
 //
 // Same body and response as `POST /v1/tenant/company-events`. Needs the `events:write` key scope and an `Idempotency-Key` header.
 //
@@ -4961,7 +4959,7 @@ func (c *ClientWithResponses) PostV1PublicApiCompanyEventWithResponse(ctx contex
 	return ParsePostV1PublicApiCompanyEventResponse(rsp)
 }
 
-// PutV1PublicApiCompanyRevenueWithBodyWithResponse Public API: push a customer's revenue (CF-86)
+// PutV1PublicApiCompanyRevenueWithBodyWithResponse Public API: push a customer's revenue
 //
 // Same body and response as `PUT /v1/tenant/company-revenue`. Needs the `revenue:write` key scope and an `Idempotency-Key` header; a reused key with a different body returns 409.
 //
@@ -4976,7 +4974,7 @@ func (c *ClientWithResponses) PutV1PublicApiCompanyRevenueWithBodyWithResponse(c
 	return ParsePutV1PublicApiCompanyRevenueResponse(rsp)
 }
 
-// PutV1PublicApiCompanyRevenueWithResponse Public API: push a customer's revenue (CF-86)
+// PutV1PublicApiCompanyRevenueWithResponse Public API: push a customer's revenue
 //
 // Same body and response as `PUT /v1/tenant/company-revenue`. Needs the `revenue:write` key scope and an `Idempotency-Key` header; a reused key with a different body returns 409.
 //
@@ -4991,7 +4989,7 @@ func (c *ClientWithResponses) PutV1PublicApiCompanyRevenueWithResponse(ctx conte
 	return ParsePutV1PublicApiCompanyRevenueResponse(rsp)
 }
 
-// PutV1PublicApiCompanyUsageWithBodyWithResponse Public API: report a customer's product usage (CF-87)
+// PutV1PublicApiCompanyUsageWithBodyWithResponse Public API: report a customer's product usage
 //
 // Same body and response as `PUT /v1/tenant/company-usage`. Needs the `health:write` key scope and an `Idempotency-Key` header.
 //
@@ -5006,7 +5004,7 @@ func (c *ClientWithResponses) PutV1PublicApiCompanyUsageWithBodyWithResponse(ctx
 	return ParsePutV1PublicApiCompanyUsageResponse(rsp)
 }
 
-// PutV1PublicApiCompanyUsageWithResponse Public API: report a customer's product usage (CF-87)
+// PutV1PublicApiCompanyUsageWithResponse Public API: report a customer's product usage
 //
 // Same body and response as `PUT /v1/tenant/company-usage`. Needs the `health:write` key scope and an `Idempotency-Key` header.
 //
@@ -5023,7 +5021,7 @@ func (c *ClientWithResponses) PutV1PublicApiCompanyUsageWithResponse(ctx context
 
 // GetV1PublicApiContactsWithResponse Public API: get contacts
 //
-// API key scope (`contacts:read`) and the key creator's current permissions both apply. Per-key requests/minute limit. Same response envelope and pagination as tenant API. Items carry `external_id`, `verified_at` and the company's `company_external_id` (CF-195).
+// API key scope (`contacts:read`) and the key creator's current permissions both apply. Per-key requests/minute limit. Same response envelope and pagination as tenant API. Items carry `external_id`, `verified_at` and the company's `company_external_id`.
 //
 // Returns a wrapper object for the known response body format(s).
 //
@@ -5036,7 +5034,7 @@ func (c *ClientWithResponses) GetV1PublicApiContactsWithResponse(ctx context.Con
 	return ParseGetV1PublicApiContactsResponse(rsp)
 }
 
-// PostV1PublicApiContactsWithBodyWithResponse Public API: create a contact (CF-195)
+// PostV1PublicApiContactsWithBodyWithResponse Public API: create a contact
 //
 // Same body and response as `POST /v1/tenant/contacts`. Needs the `contacts:write` key scope, the key creator's `tenant.contacts.write` permission and an `Idempotency-Key` header. Prefer `PUT /v1/public-api/contacts/by-external-id` to sync users from your system.
 //
@@ -5051,7 +5049,7 @@ func (c *ClientWithResponses) PostV1PublicApiContactsWithBodyWithResponse(ctx co
 	return ParsePostV1PublicApiContactsResponse(rsp)
 }
 
-// PostV1PublicApiContactsWithResponse Public API: create a contact (CF-195)
+// PostV1PublicApiContactsWithResponse Public API: create a contact
 //
 // Same body and response as `POST /v1/tenant/contacts`. Needs the `contacts:write` key scope, the key creator's `tenant.contacts.write` permission and an `Idempotency-Key` header. Prefer `PUT /v1/public-api/contacts/by-external-id` to sync users from your system.
 //
@@ -5066,7 +5064,7 @@ func (c *ClientWithResponses) PostV1PublicApiContactsWithResponse(ctx context.Co
 	return ParsePostV1PublicApiContactsResponse(rsp)
 }
 
-// PutV1PublicApiContactByExternalIdWithBodyWithResponse Public API: create or update a contact by your user id (CF-195)
+// PutV1PublicApiContactByExternalIdWithBodyWithResponse Public API: create or update a contact by your user id
 //
 // Same body and response as `PUT /v1/tenant/contacts/by-external-id`: 201 when created, 200 when the contact with `external_id` existed; the same id twice edits one contact. Needs the `contacts:write` key scope, the key creator's `tenant.contacts.write` permission and an `Idempotency-Key` header (use a new key per change; a reused key replays the stored answer).
 //
@@ -5081,7 +5079,7 @@ func (c *ClientWithResponses) PutV1PublicApiContactByExternalIdWithBodyWithRespo
 	return ParsePutV1PublicApiContactByExternalIdResponse(rsp)
 }
 
-// PutV1PublicApiContactByExternalIdWithResponse Public API: create or update a contact by your user id (CF-195)
+// PutV1PublicApiContactByExternalIdWithResponse Public API: create or update a contact by your user id
 //
 // Same body and response as `PUT /v1/tenant/contacts/by-external-id`: 201 when created, 200 when the contact with `external_id` existed; the same id twice edits one contact. Needs the `contacts:write` key scope, the key creator's `tenant.contacts.write` permission and an `Idempotency-Key` header (use a new key per change; a reused key replays the stored answer).
 //

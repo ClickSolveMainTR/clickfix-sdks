@@ -4,5 +4,3 @@ packages:
   - react-widget
   - react-native
   - expo
-  - examples/node
-  - examples/react-native

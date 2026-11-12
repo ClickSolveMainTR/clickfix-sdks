@@ -1,6 +1,6 @@
 {
   "name": "@getclickfix/visitor-core",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "ClickFix visitor (widget) API core for any JavaScript runtime: typed fetch client, retries and session renewal, realtime abstraction and the webview bridge types. No DOM; React Native (Hermes), Node 22+ and browsers.",
   "keywords": [
     "clickfix",

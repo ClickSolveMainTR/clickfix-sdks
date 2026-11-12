@@ -1,4 +1,4 @@
-// Hooks (CF-202). Every hook reads the provider's client; nothing here
+// Hooks. Every hook reads the provider's client; nothing here
 // touches the DOM. Lists refresh on realtime pushes, on app foreground and,
 // while the socket is down, by polling (4 s in an open conversation).
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
@@ -33,7 +33,7 @@ export interface IdentifyOptions {
   name?: string;
   email?: string;
   phone?: string;
-  /** `id` is the company's external id; it binds only when `userHash` signs it too (CF-206). */
+  /** `id` is the company's external id; it binds only when `userHash` signs it too. */
   company?: { id?: string; name?: string; domain?: string };
 }
 

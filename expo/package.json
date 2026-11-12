@@ -1,6 +1,6 @@
 {
   "name": "@getclickfix/expo",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "ClickFix customer support for Expo (SDK 54+): one-line ClickFixExpoProvider over @getclickfix/react-native with expo-secure-store token storage, expo-file-system attachments, expo-linking deep links and expo-constants app identity.",
   "keywords": [
     "clickfix",

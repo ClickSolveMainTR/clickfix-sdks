@@ -1,4 +1,4 @@
-// Theme and labels of the optional screens (CF-202). Plain StyleSheet
+// Theme and labels of the optional screens. Plain StyleSheet
 // values so an app can match its own look: pass `theme`/`labels` to a
 // screen or wrap the tree in <ClickFixThemeProvider>. Colors follow the web
 // widget's defaults (panel accent #2563eb, light surfaces).

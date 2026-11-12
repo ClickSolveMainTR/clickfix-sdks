@@ -1,6 +1,6 @@
 module github.com/ClickSolveMainTR/clickfix-sdks/go
 
-go 1.26.11
+go 1.24.0
 
 require github.com/oapi-codegen/runtime v1.8.0
 

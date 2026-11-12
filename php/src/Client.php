@@ -31,7 +31,7 @@ final class Client
     public const DEFAULT_BASE_DELAY_MS = 250;
     public const MAX_DELAY_MS = 30000;
     public const DEFAULT_TIMEOUT = 30.0;
-    public const USER_AGENT = 'clickfix-php-sdk/0.1.0';
+    public const USER_AGENT = 'clickfix-php-sdk/0.2.0';
 
     private readonly string $baseUrl;
     private readonly ClientInterface $http;

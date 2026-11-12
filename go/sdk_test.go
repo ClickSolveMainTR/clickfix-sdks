@@ -7,6 +7,8 @@ import (
 	"encoding/hex"
 	"io"
 	"net/http"
+	"net/http/httptest"
+	"net/url"
 	"strings"
 	"testing"
 	"time"
@@ -84,7 +86,7 @@ func TestPaginationAndCancellation(t *testing.T) {
 	}
 }
 
-// CF-206: the company-signed user_hash is HMAC over user id, newline,
+// The company-signed user_hash is HMAC over user id, newline,
 // company id; it never collides with the user-only hash or with plain
 // concatenation, and the backend verifies exactly these bytes.
 func TestIdentityCompanyHash(t *testing.T) {
@@ -105,5 +107,44 @@ func TestIdentityCompanyHash(t *testing.T) {
 	}
 	if IdentityCompanyHash(secret, "10\n01", "F-77") != "" || IdentityCompanyHash(secret, "1001", "F\r77") != "" {
 		t.Fatal("ids with line breaks must not be signed")
+	}
+}
+
+func TestDecodeDataAndListPageQuery(t *testing.T) {
+	type company struct {
+		UUID       string `json:"uuid"`
+		ExternalID string `json:"external_id"`
+	}
+	env := &IntegrationEnvelope{Success: true, Data: map[string]any{
+		"items": []any{map[string]any{"uuid": "c-1", "external_id": "F-77"}}, "total": 1, "limit": 100, "offset": 0,
+	}}
+	page, err := DecodeData[Page[company]](env)
+	if err != nil || page.Total != 1 || len(page.Items) != 1 || page.Items[0].ExternalID != "F-77" {
+		t.Fatal(page, err)
+	}
+	if _, err := DecodeData[Page[company]](nil); err == nil {
+		t.Fatal("nil envelope accepted")
+	}
+
+	var gotQuery url.Values
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/v1/public-api/companies" || r.Header.Get("Authorization") != "Bearer k" {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+		gotQuery = r.URL.Query()
+		_, _ = w.Write([]byte(`{"success":true,"data":{"items":[{"uuid":"c-1","external_id":"F-77"}],"total":1,"limit":5,"offset":0},"meta":{}}`))
+	}))
+	defer srv.Close()
+	c, err := New(srv.URL, "k")
+	if err != nil {
+		t.Fatal(err)
+	}
+	p, err := ListPageQuery[company](context.Background(), c, "companies", 5, 0, url.Values{"external_id": {"F-77"}, "limit": {"999"}})
+	if err != nil || len(p.Items) != 1 || p.Items[0].UUID != "c-1" {
+		t.Fatal(p, err)
+	}
+	if gotQuery.Get("external_id") != "F-77" || gotQuery.Get("limit") != "5" || gotQuery.Get("offset") != "0" {
+		t.Fatal(gotQuery)
 	}
 }

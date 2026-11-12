@@ -1,7 +1,8 @@
 'use client';
-// UI-free visitor client for React (CF-199). The transport lives in
-// @getclickfix/visitor-core (CF-201): this package only binds it to React in
-// browser mode (same-origin BFF, the page origin is the credential).
+// UI-free visitor client for React. The transport lives in
+// @getclickfix/visitor-core: this package only binds it to React in browser
+// mode (the page origin is the credential, checked against the widget's
+// allowed domains).
 import { useCallback, useEffect, useState, useSyncExternalStore } from 'react';
 import {
   createVisitorClient,
@@ -18,12 +19,23 @@ export type {
 export const WidgetError = VisitorError;
 export type WidgetError = VisitorError;
 export interface WidgetOptions extends Omit<VisitorClientOptions,'mode'|'app'> {
- /** Same-origin BFF prefix, usually /api. */
+ /**
+  * API prefix. Default `/api`: a same-origin proxy of the widget API (the ClickFix app itself, or your own BFF).
+  * A page on your own domain uses `appOrigin` instead.
+  */
  baseURL?:string;
+ /**
+  * ClickFix app origin, e.g. `https://getclickfix.com`: requests go to `<appOrigin>/api/v1/widget/...` across
+  * origins (CORS, never cookies). Your page's origin must be listed in the widget's allowed domains.
+  * Ignored when `baseURL` is set.
+  */
+ appOrigin?:string;
 }
 /** Create once per mounted widget. No global storage, DOM access or shared user state. */
 export function createWidgetClient(options:WidgetOptions){
- return createVisitorClient({...options,mode:'browser'});
+ const {appOrigin,...rest}=options;
+ const baseURL=rest.baseURL??(appOrigin?`${appOrigin.replace(/\/+$/,'')}/api`:undefined);
+ return createVisitorClient({...rest,...(baseURL===undefined?{}:{baseURL}),mode:'browser'});
 }
 export type WidgetClient=ReturnType<typeof createWidgetClient>;
 /** Keep client stable (useState/useMemo); call init explicitly after consent. */

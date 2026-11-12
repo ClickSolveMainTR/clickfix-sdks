@@ -1,4 +1,4 @@
-// An in-memory widget API behind `fetch` (CF-202 tests): the routes the
+// An in-memory widget API behind `fetch` (tests): the routes the
 // hooks use, with the shapes of backend/docs/openapi.yaml (/v1/widget/*).
 // Nothing is networked; the same stub stands in for the Expo package tests.
 import type { FetchLike } from '@getclickfix/visitor-core';

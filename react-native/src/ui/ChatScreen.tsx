@@ -1,4 +1,4 @@
-// One conversation (CF-202): message list (oldest at the bottom, like the
+// One conversation: message list (oldest at the bottom, like the
 // web widget), composer with optional attachment, typing indicator, read
 // receipts on focus, the start form for a new conversation and the rating
 // row when the conversation can be rated.

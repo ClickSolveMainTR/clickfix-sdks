@@ -15,14 +15,15 @@ re-exports all of it, adding the Expo adapters:
 npx expo install @getclickfix/expo expo-secure-store expo-file-system expo-linking expo-constants
 ```
 
-Changes: [CHANGELOG.md](./CHANGELOG.md). Example app:
-[`examples/react-native`](../examples/react-native/README.md).
+Changes: [CHANGELOG.md](./CHANGELOG.md). Guide:
+https://getclickfix.com/docs/integration-guide/expo. Example app:
+[`clickfix-examples/expo`](https://github.com/ClickSolveMainTR/clickfix-examples/tree/main/expo).
 
 ## Compatibility
 
 | Package | Expo SDK | React Native | Notes |
 |---|---|---|---|
-| 0.1.x | 54 – 58 (built with 58) | 0.81 – 0.88 | `expo-file-system` `File` API (SDK 54+); New Architecture |
+| 0.1.x, 0.2.x | 54 – 58 (built with 58) | 0.81 – 0.88 | `expo-file-system` `File` API (SDK 54+); New Architecture |
 
 ## Setup
 
@@ -78,12 +79,3 @@ the key bound to the real bundle id. `isExpoGo()` tells the two apart.
 for push payloads and e-mails. `useExpoDeepLinkConversation()` follows
 `expo-linking`'s `useURL()` and returns the conversation id; call `clear()`
 after navigating.
-
-## Türkçe özet
-
-Expo uygulamaları için tek satır kurulum: `ClickFixExpoProvider` belirteci
-`expo-secure-store`'da tutar, paket adını `app.json`'dan alır; `pickAttachment`
-ile dosya ekleme, `useExpoDeepLinkConversation` ile derin bağlantı. Tüm
-hook'lar ve ekranlar `@getclickfix/react-native` paketinden gelir ve buradan
-yeniden dışa aktarılır. Expo Go'da paket adı Expo Go'nunkidir; geliştirme
-anahtarı oluşturup `packageName` verin. `user_hash` yalnız sunucuda üretilir.

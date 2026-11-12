@@ -1,4 +1,4 @@
-// Optional screens (CF-202): `import { ChatScreen } from '@getclickfix/react-native/ui'`.
+// Optional screens: `import { ChatScreen } from '@getclickfix/react-native/ui'`.
 // StyleSheet only, no extra dependencies; theme and labels via props or
 // <ClickFixThemeProvider>.
 export { ConversationListScreen } from './ConversationListScreen.js';

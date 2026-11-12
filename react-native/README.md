@@ -18,14 +18,15 @@ npm install @getclickfix/react-native
 npm install react-native-keychain
 ```
 
-Changes: [CHANGELOG.md](./CHANGELOG.md). Full walkthrough:
-https://getclickfix.com/docs/integration-guide.
+Changes: [CHANGELOG.md](./CHANGELOG.md). Guide:
+https://getclickfix.com/docs/integration-guide/react-native. Runnable app:
+[`clickfix-examples/react-native`](https://github.com/ClickSolveMainTR/clickfix-examples/tree/main/react-native).
 
 ## Compatibility
 
 | Package | React Native | React | Notes |
 |---|---|---|---|
-| 0.1.x | 0.81 and newer (tested with 0.88) | 18.2 / 19 | New Architecture and Hermes; Expo SDK 54–58 through `@getclickfix/expo` |
+| 0.1.x, 0.2.x | 0.81 and newer (tested with 0.88) | 18.2 / 19 | New Architecture and Hermes; Expo SDK 54–58 through `@getclickfix/expo` |
 
 ## Setup
 
@@ -80,10 +81,10 @@ socket (hooks poll while it is down).
 
 ```tsx
 const visitor = useVisitor();
-await visitor.identify({ userId: '1001', name: 'Ayşe', email: 'ayse@example.com', company: { id: 'F-77', name: 'Örnek A.Ş.' } });
+await visitor.identify({ userId: '1001', name: 'Ada', email: 'ada@example.com', company: { id: 'F-77', name: 'Example Ltd' } });
 // userHash omitted → the provider's getUserHash('1001', 'F-77'); or pass userHash yourself.
 visitor.verified;                       // true after a valid user_hash
-visitor.visitor?.company_verified;     // the company id was signed too (CF-206)
+visitor.visitor?.company_verified;     // the company id was signed too
 await visitor.setAttributes({ plan: 'pro', seats: 3 });   // custom fields
 await visitor.updateProfile({ phone: '+90…' });
 visitor.setScreen('orders/42');        // page_url of the next message
@@ -95,7 +96,7 @@ await visitor.reset();                 // logout: a stranger's session
 
 ```tsx
 const { items, loading, error, reload, create } = useConversations();
-const sent = await create('Merhaba');              // or create({ text, form, consent }, file)
+const sent = await create('Hello');              // or create({ text, form, consent }, file)
 ```
 
 Starts from the bootstrap list, refreshes on `message.created` /
@@ -106,8 +107,8 @@ Starts from the bootstrap list, refreshes on `message.created` /
 ```tsx
 const chat = useConversation(uuid /* or null for a new one */, { pollMs: 4000 });
 chat.messages;              // oldest first; chat.hasMore + chat.loadMore() for history
-await chat.send('Teşekkürler');
-await chat.send({ text: 'Ekte' }, { uri, name: 'photo.jpg', type: 'image/jpeg' });
+await chat.send('Thanks');
+await chat.send({ text: 'Attached' }, { uri, name: 'photo.jpg', type: 'image/jpeg' });
 chat.setTyping(true);       // rate-limited; setTyping(false) when the input empties
 chat.markRead();            // read receipts for agent replies
 chat.agentTyping;           // from the realtime channel (clears after 8 s)
@@ -164,18 +165,39 @@ picker, or `null` when cancelled (`@getclickfix/expo` ships `pickAttachment`).
 | Files | any `{ uri, name, type }` | `fileAttachment(uri)`, `pickAttachment()` |
 | Deep links | `useDeepLinkConversation()` (RN `Linking`) | `useExpoDeepLinkConversation()`, `conversationURL()` |
 
+## Webview instead of native screens
+
+To show the ready-made widget instead of your own screens, host
+`https://<app>/widget-embed.html?widget=WIDGET_ID` in `react-native-webview`
+and use the bridge helpers this package re-exports from `visitor-core`:
+
+```tsx
+import { useRef } from 'react';
+import { Linking } from 'react-native';
+import { WebView } from 'react-native-webview';
+import { commandScript, parseMessage, isSafeLink, useClickFix } from '@getclickfix/react-native';
+
+export function SupportWebView({ onUnread }: { onUnread: (n: number) => void }) {
+  const ref = useRef<WebView>(null);
+  const { client } = useClickFix();   // continue the provider's visitor session in the webview
+  return (
+    <WebView
+      ref={ref}
+      source={{ uri: 'https://support.example.com/widget-embed.html?widget=WIDGET_ID' }}
+      originWhitelist={['https://support.example.com']}
+      onMessage={(e) => {
+        const m = parseMessage(e.nativeEvent.data);
+        if (m?.type === 'clickfix:ready') ref.current?.injectJavaScript(commandScript({ type: 'clickfix:session', token: client.getToken() }));
+        if (m?.type === 'clickfix:event' && m.event === 'unread') onUnread(m.payload.count);
+        if (m?.type === 'clickfix:link' && isSafeLink(m.url)) void Linking.openURL(m.url);
+      }}
+    />
+  );
+}
+```
+
 ## Testing
 
 `pnpm test:native` in `sdks/` runs the hooks and screens under jest with
 the React Native preset and a fake widget API (`tests/stub.ts`); the Node
 test runner checks the published files (no DOM, metadata).
-
-## Türkçe özet
-
-Bare React Native için ClickFix: `ClickFixProvider` (uygulama anahtarı +
-paket adı, `getUserHash` ile sunucudan `user_hash`, `SecureStorage` ile
-belirteç), `useVisitor` / `useConversations` / `useConversation` /
-`useHelpSearch` / `useRating` hook'ları, derin bağlantı yardımcıları ve
-`@getclickfix/react-native/ui` altında temalanabilir konuşma listesi, sohbet
-ve ön form ekranları. `user_hash` yalnız sunucuda üretilir; Expo
-kullanıyorsanız `@getclickfix/expo` paketini kullanın.

@@ -35,6 +35,7 @@ export {
   BRIDGE_VERSION,
   COMMAND_TYPES,
   MESSAGE_TYPES,
+  EVENT_NAMES,
   encodeCommand,
   commandScript,
   parseMessage,
@@ -43,6 +44,9 @@ export {
 export type {
   BridgeCommand,
   BridgeCommandType,
+  BridgeEvent,
+  BridgeEventMap,
+  BridgeEventName,
   BridgeIdentity,
   BridgeMessage,
   BridgeMessageType,

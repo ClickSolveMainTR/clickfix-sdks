@@ -1,10 +1,14 @@
 # @getclickfix/expo
 
-Sürümleme: [SemVer](https://semver.org). `0.x` sürümlerinde küçük sürüm (`0.N`) kırıcı değişiklik taşıyabilir; her kırıcı değişiklik burada **Kırıcı** başlığıyla yazılır. Sürüm `package.json` içindedir; `main`'e birleşen bir değişiklikte sürüm değiştiyse CI (`sdk-publish`) npm'e yayımlar ve ayna repoda `expo/vX.Y.Z` etiketi basılır.
+Versioning: [SemVer](https://semver.org). In `0.x` a minor version (`0.N`) may carry a breaking change; every breaking change is listed here under **Breaking**. The version lives in `package.json`; a release is published to npm automatically and tagged `expo/vX.Y.Z` in the mirror.
+
+## 0.2.0 - 2026-11-12
+
+- Built on `@getclickfix/react-native` 0.2 and re-exports it: the webview bridge helpers and typed `clickfix:event` payloads are available from `@getclickfix/expo` too. No Expo-specific change.
 
 ## 0.1.0 - 2026-11-11
 
-İlk yayın (CF-202). `@getclickfix/react-native`'i sarar ve tüm yüzeyini yeniden dışa aktarır; Expo SDK 54+ (hedef 58).
+First release. Wraps `@getclickfix/react-native` and re-exports all of it; Expo SDK 54+ (built against 58).
 
-- `ClickFixExpoProvider`: tek satır kurulum; belirteç `expo-secure-store`'da, paket adı `expo-constants` (`ios.bundleIdentifier` / `android.package`) üzerinden, Expo Go'da `packageName` zorunlu.
-- `secureStoreStorage`, `fileAttachment` / `pickAttachment` (`expo-file-system` `File`, boyut sınırı, MIME tahmini), `conversationURL` / `useExpoDeepLinkConversation` (`expo-linking`), `appPackageName` / `appVersion` / `isExpoGo`.
+- `ClickFixExpoProvider`: one-line setup; the token lives in `expo-secure-store`, the package name comes from `expo-constants` (`ios.bundleIdentifier` / `android.package`), `packageName` is required in Expo Go.
+- `secureStoreStorage`, `fileAttachment` / `pickAttachment` (`expo-file-system` `File`, size limit, MIME detection), `conversationURL` / `useExpoDeepLinkConversation` (`expo-linking`), `appPackageName` / `appVersion` / `isExpoGo`.

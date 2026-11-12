@@ -3,7 +3,7 @@ description: >-
   Secure ClickFix support webview for Flutter: loads the hosted widget page and
   implements the ClickFix webview bridge contract v1 (identify, track, open,
   deep links, consent, reset) over a JavaScript channel.
-version: 0.1.1
+version: 0.1.2
 repository: https://github.com/ClickSolveMainTR/clickfix-sdks/tree/main/flutter/clickfix_webview
 issue_tracker: https://github.com/ClickSolveMainTR/clickfix-sdks/issues
 documentation: https://getclickfix.com/docs/integration-guide
@@ -14,8 +14,9 @@ topics:
   - chat
 
 environment:
+  # The Dart constraint alone decides which Flutter releases resolve: any Flutter
+  # whose bundled Dart is a stable 3.10.0 or newer.
   sdk: ^3.10.0
-  flutter: ">=3.38.0"
 
 dependencies:
   flutter:

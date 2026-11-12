@@ -1,4 +1,4 @@
-// Webview bridge types (CF-199 contract, docs/webview-bridge.md) shared
+// Webview bridge types (bridge contract v1, docs/webview-bridge.md) shared
 // between the widget (frontend/widget-sdk/src/shared/bridge.ts) and native
 // SDKs that host the webview. The native side only encodes commands and
 // decodes messages; parsing here is shape-checking, never validation of
@@ -45,6 +45,72 @@ export const COMMAND_TYPES: readonly BridgeCommandType[] = [
   'clickfix:session',
 ];
 
+/**
+ * Payloads of the widget SDK events forwarded to the host as `clickfix:event`
+ * (the widget's FORWARDED_EVENTS; same shapes as `ClickFixEventMap` in widget.d.ts).
+ */
+export interface BridgeEventMap {
+  ready: { protocol_version: number; sdk_version: string; widget_id: string; visitor_id: string };
+  open: { view?: string };
+  close: Record<string, never>;
+  /** The visitor moved to another tab of the panel. */
+  view: { view: string };
+  /** An agent (or AI agent: sender_type "bot") reply arrived. */
+  message: { conversation_uuid: string; message_uuid: string; text: string; sender_type: string };
+  /** The visitor's message was stored. */
+  'message:sent': { conversation_uuid: string; message_uuid: string };
+  'conversation:started': { conversation_uuid: string };
+  /** A conversation was resolved or closed. */
+  'conversation:ended': { conversation_uuid: string; status: string };
+  /** Unread agent replies across the visitor's conversations changed. */
+  unread: { count: number };
+  /** `company_verified`: user_hash signed `company.id` too; false when the company was only a hint. */
+  identify: { verified: boolean; company_verified: boolean };
+  /** The CSAT survey was answered. */
+  csat: { conversation_uuid: string; score: number; existing: boolean };
+  /** A proactive message trigger fired. */
+  trigger: { id: string; name: string; message: string };
+  /** setAttributes result (pending: sent with the first message). */
+  attributes: { applied: string[]; ignored: string[]; pending: boolean };
+  consent: { granted: boolean };
+  /** Page targeting changed. */
+  visibility: { visible: boolean; reason: string };
+  reset: Record<string, never>;
+  track: { name: string; properties?: Record<string, unknown> };
+  error: { code: string; message: string };
+}
+
+export type BridgeEventName = keyof BridgeEventMap;
+
+/**
+ * A `clickfix:event` message. Narrow on `event` to get the payload type:
+ * `if (m.type === 'clickfix:event' && m.event === 'unread') m.payload.count`.
+ */
+export type BridgeEvent<E extends BridgeEventName = BridgeEventName> = {
+  [K in E]: { type: 'clickfix:event'; event: K; payload: BridgeEventMap[K] };
+}[E];
+
+export const EVENT_NAMES: readonly BridgeEventName[] = [
+  'ready',
+  'open',
+  'close',
+  'view',
+  'message',
+  'message:sent',
+  'conversation:started',
+  'conversation:ended',
+  'unread',
+  'identify',
+  'csat',
+  'trigger',
+  'attributes',
+  'consent',
+  'visibility',
+  'reset',
+  'track',
+  'error',
+];
+
 /** Widget → host (app). */
 export type BridgeMessage =
   | {
@@ -55,7 +121,7 @@ export type BridgeMessage =
       widget_id: string;
       visitor_id: string;
     }
-  | { type: 'clickfix:event'; event: string; payload: unknown }
+  | BridgeEvent
   | { type: 'clickfix:link'; url: string }
   | { type: 'clickfix:result'; id: string; ok: boolean; data?: unknown; error?: { code: string; message: string } }
   /** The webview's visitor token after ready, identify and reset (`token` is "" after reset). */
@@ -87,7 +153,8 @@ export function commandScript(command: BridgeCommand): string {
 
 /**
  * Decodes a message the widget posted to the host (`onMessage` data). Returns
- * null for anything that is not a known widget → host message, so other
+ * null for anything that is not a known widget → host message (including a
+ * `clickfix:event` with an event name outside `EVENT_NAMES`), so other
  * scripts' traffic in the same webview is ignored.
  */
 export function parseMessage(raw: unknown): BridgeMessage | null {
@@ -106,7 +173,10 @@ export function parseMessage(raw: unknown): BridgeMessage | null {
     case 'clickfix:ready':
       return typeof m.widget_id === 'string' ? (m as BridgeMessage) : null;
     case 'clickfix:event':
-      return typeof m.event === 'string' ? (m as BridgeMessage) : null;
+      // Events this version does not know are ignored like foreign traffic; payloads are the widget's own.
+      return typeof m.event === 'string' && (EVENT_NAMES as readonly string[]).includes(m.event) && typeof m.payload === 'object' && m.payload !== null
+        ? (m as BridgeMessage)
+        : null;
     case 'clickfix:link':
       return typeof m.url === 'string' ? (m as BridgeMessage) : null;
     case 'clickfix:result':

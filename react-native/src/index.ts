@@ -9,6 +9,10 @@ export type { SecureStorage, KeychainLike } from './storage.js';
 export { parseConversationLink, useDeepLinkConversation } from './deeplink.js';
 export type { LinkingLike } from './deeplink.js';
 export { VisitorError, isNetworkError, createVisitorClient, createRealtime } from '@getclickfix/visitor-core';
+// Webview bridge helpers: host the ready-made widget (widget-embed.html) in react-native-webview
+// and hand it this provider's session (`{ type: 'clickfix:session', token: client.getToken() }`).
+export { BRIDGE_VERSION, EVENT_NAMES, encodeCommand, commandScript, parseMessage, isSafeLink } from '@getclickfix/visitor-core';
+export type { BridgeCommand, BridgeEvent, BridgeEventMap, BridgeEventName, BridgeMessage, BridgeView } from '@getclickfix/visitor-core';
 export type {
   VisitorClient,
   Session,

@@ -66,8 +66,22 @@ final class BladeTest extends TestCase
         $user = new IdentityUser;
         $identity = ClickFix::identity($user);
         $this->assertSame('crm-77', $identity['user_id']);
-        $this->assertSame(hash_hmac('sha256', 'crm-77', self::IDENTITY_SECRET), $identity['user_hash']);
+        // company.id is signed together with the user id, so the widget reports company_verified: true.
+        $this->assertSame(hash_hmac('sha256', "crm-77\nF-77", self::IDENTITY_SECRET), $identity['user_hash']);
         $this->assertSame(['id' => 'F-77', 'name' => 'Acme'], $identity['company']);
+        $this->assertSame($identity['user_hash'], ClickFix::userHash('crm-77', 'F-77'));
+        $this->assertStringContainsString('"user_hash":"'.$identity['user_hash'].'"', (string) ClickFix::widget($user));
+    }
+
+    public function test_company_field_from_config_is_nested_and_signed(): void
+    {
+        $this->app['config']->set('clickfix.widget.user', ['name' => 'name', 'company.id' => 'company_ref']);
+        $user = $this->user();
+        $user->setAttribute('company_ref', 'F-9');
+        $identity = ClickFix::identity($user);
+        $this->assertSame(['id' => 'F-9'], $identity['company']);
+        $this->assertSame(hash_hmac('sha256', $user->id."\nF-9", self::IDENTITY_SECRET), $identity['user_hash']);
+        $this->assertSame(hash_hmac('sha256', (string) $user->id, self::IDENTITY_SECRET), ClickFix::userHash($user), 'without a company id the user id alone is signed');
     }
 
     public function test_missing_widget_id_or_secret_is_a_clear_error(): void

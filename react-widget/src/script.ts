@@ -1,4 +1,4 @@
-// Script SDK bindings (CF-150): typed React hooks around window.ClickFix,
+// Script SDK bindings: typed React hooks around window.ClickFix,
 // the full widget UI loaded from https://<app>/widget.js. Use these for the
 // ready-made messenger; use createWidgetClient (index.ts) to build your own UI.
 import { useEffect, useRef, useState } from 'react';
@@ -14,7 +14,7 @@ export interface LoadOptions extends ClickFixInitOptions {
   widgetId: string;
 }
 
-/** Installs the queue stub (calls before the script loads are replayed). */
+/** Installs the queue stub (calls before the script loads are replayed). Browser only. */
 function stub(): ClickFixSDK {
   const w = window as unknown as { ClickFix?: Queue };
   if (!w.ClickFix) {
@@ -23,6 +23,39 @@ function stub(): ClickFixSDK {
   }
   return w.ClickFix as unknown as ClickFixSDK;
 }
+
+type AnyFn = (...args: unknown[]) => unknown;
+/** Method names of ClickFixSDK (widget.d.ts); a type test keeps the list complete. */
+export const SDK_METHODS: ReadonlySet<string> = new Set<Exclude<keyof ClickFixSDK, 'version'>>([
+  'init', 'boot', 'open', 'close', 'toggle', 'show', 'hide', 'showLauncher', 'hideLauncher',
+  'identify', 'update', 'setAttributes', 'track', 'startConversation', 'showNewMessage', 'showMessage',
+  'openArticle', 'searchHelp', 'setLocale', 'setTheme', 'consent', 'getUnreadCount', 'getVisitorId',
+  'isOpen', 'getState', 'on', 'once', 'off', 'startReplay', 'stopCapture', 'reset', 'shutdown',
+]);
+/**
+ * The SDK handle the hooks hand out. It resolves window.ClickFix on every call,
+ * never while rendering, so a component using the hooks can be rendered on the
+ * server (Next.js SSR, static prerendering). Before widget.js has loaded a
+ * method call (`sdk.reset()`) goes through the queue like the command form
+ * (`sdk('reset')`). Calling it on the server throws a clear error.
+ */
+const lazySDK = new Proxy(function clickFix() {} as unknown as AnyFn, {
+  apply(_target, _this, args: unknown[]) {
+    if (typeof window === 'undefined') throw new Error('ClickFix: the widget SDK is only available in the browser (call it from an effect or an event handler)');
+    return (stub() as unknown as AnyFn)(...args);
+  },
+  get(_target, prop) {
+    if (typeof prop !== 'string' || typeof window === 'undefined') return undefined;
+    const sdk = stub() as unknown as AnyFn & Record<string, unknown>;
+    if (prop === 'version') return sdk.version;
+    // Only ClickFixSDK methods: anything else (then, toJSON, $$typeof, constructor…) is
+    // undefined, so the handle is not a thenable and serializes like a plain function.
+    if (!SDK_METHODS.has(prop)) return undefined;
+    const value = sdk[prop];
+    if (typeof value === 'function') return (value as AnyFn).bind(sdk);
+    return (...args: unknown[]) => sdk(prop, ...args);
+  },
+}) as unknown as ClickFixSDK;
 
 /** Loads widget.js once and boots the widget. Returns the global SDK. */
 export function loadClickFix(options: LoadOptions): ClickFixSDK {
@@ -40,13 +73,13 @@ export function loadClickFix(options: LoadOptions): ClickFixSDK {
   return sdk;
 }
 
-/** The global SDK (stubbed until widget.js has loaded). */
+/** The global SDK (queued until widget.js has loaded). Safe to call while rendering; use it in effects and handlers. */
 export function clickFix(): ClickFixSDK {
-  return stub();
+  return lazySDK;
 }
 
 /** Subscribes to a widget event for the component's lifetime. */
-export function useClickFixEvent<E extends ClickFixEvent>(event: E, handler: ClickFixHandler<E>) {
+export function useClickFixEvent<E extends ClickFixEvent>(event: E, handler: ClickFixHandler<E>): void {
   const ref = useRef(handler);
   ref.current = handler;
   useEffect(() => {
@@ -97,5 +130,5 @@ export function useClickFix(options: LoadOptions | null): ClickFixWidgetState {
       setReady(false);
     };
   }, [key]);
-  return { ready, open, unread, state, sdk: stub() };
+  return { ready, open, unread, state, sdk: lazySDK };
 }

@@ -45,14 +45,19 @@ class ClickFixManager
                 || ($e instanceof \Illuminate\Http\Client\RequestException && in_array($e->response->status(), [429, 502, 503, 504], true)), false);
     }
 
-    /** user_hash for identify(): computed here, never in the browser. */
-    public function userHash(mixed $user): string
+    /**
+     * user_hash for identify(): computed here, never in the browser. With $companyId (the company id
+     * sent as identify company.id) the hash signs both ids, and the widget reports company_verified.
+     */
+    public function userHash(mixed $user, ?string $companyId = null): string
     {
-        return Signer::userHash($this->identitySecret(), Identity::idOf($user));
+        return Signer::userHash($this->identitySecret(), Identity::idOf($user), $companyId);
     }
 
     /**
      * The identify() payload for a user: user_id, user_hash and the configured profile fields.
+     * When the payload carries company.id (from toClickFixIdentity() or a "company.id" field in
+     * clickfix.widget.user), user_hash signs the user id and the company id together.
      * Share it with Inertia or a JSON endpoint and pass it to ClickFix("identify", ...).
      *
      * @return array<string, mixed>
@@ -60,7 +65,7 @@ class ClickFixManager
     public function identity(mixed $user): array
     {
         $identity = Identity::for($user, (array) $this->config->get('clickfix.widget.user', []));
-        $identity['user_hash'] = Signer::userHash($this->identitySecret(), $identity['user_id']);
+        $identity['user_hash'] = Signer::userHash($this->identitySecret(), $identity['user_id'], Identity::companyIdOf($identity));
 
         return $identity;
     }

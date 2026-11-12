@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Facade;
 /**
  * @method static \ClickFix\Client client()
  * @method static \Illuminate\Http\Client\PendingRequest http()
- * @method static string userHash(mixed $user)
+ * @method static string userHash(mixed $user, ?string $companyId = null)
  * @method static array<string, mixed> identity(mixed $user)
  * @method static \Illuminate\Support\HtmlString widget(mixed $user = null, array $options = [])
  * @method static bool verifyWebhook(?string $timestamp, ?string $signature, string $body, ?int $now = null)

@@ -1,4 +1,4 @@
-// Realtime abstraction (CF-201): the widget's Centrifugo client (JSON
+// Realtime abstraction: the widget's Centrifugo client (JSON
 // protocol, one channel) without `window`. Any WebSocket-shaped
 // constructor works (browser, React Native, `ws` in Node); the host may
 // also replace the whole socket layer by passing its own `socket` factory.

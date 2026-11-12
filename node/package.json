@@ -1,6 +1,6 @@
 {
   "name": "@getclickfix/node",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "ClickFix public API client for Node.js 22+: typed requests, bounded retries, pagination, webhook signature verification and widget identity hashes.",
   "keywords": [
     "clickfix",

@@ -5,9 +5,9 @@ import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { parse } from 'yaml';
 import openapiTS, { astToString } from 'openapi-typescript';
-import { buildPublicSpec } from './public-api.mjs';
+import { buildPublicSpec, scrub } from './public-api.mjs';
 import { renderPhpEndpoints } from './php-endpoints.mjs';
-import { readPackageVersions, renderPackagesTable } from './package-versions.mjs';
+import { readPackageVersions, renderPackagesTable, renderMobilePackagesTable } from './package-versions.mjs';
 const root = new URL('../', import.meta.url);
 const spec = parse(await readFile(new URL('../../backend/docs/openapi.yaml', import.meta.url), 'utf8'));
 const check = process.argv.includes('--check');
@@ -38,17 +38,24 @@ function subset(predicate) {
     }
   }
   refs(paths);
-  return { openapi: spec.openapi, info: spec.info, servers: [{url:'https://api.example.com'}], paths, components };
+  // Generated clients are public (mirrored, published): no internal tracker references in their comments.
+  return scrub(structuredClone({ openapi: spec.openapi, info: spec.info, servers: [{url:'https://api.example.com'}], paths, components }));
 }
+// defaultNonNullable: false keeps a property with a `default` optional, as the API
+// treats it (CompanyEventInput.source defaults to "api" and need not be sent).
+const TS_OPTIONS = { defaultNonNullable: false };
 try {
   await output('../backend/docs/public-api.yaml', await buildPublicSpec(spec, new URL('../../backend/docs/public-api/', import.meta.url)));
   const server = subset(p => p.startsWith('/v1/public-api/'));
   const widget = subset(p => p.startsWith('/v1/widget/'));
-  await output('node/src/schema.d.ts', astToString(await openapiTS(server)));
-  await output('visitor-core/src/schema.d.ts', astToString(await openapiTS(widget)));
+  await output('node/src/schema.d.ts', astToString(await openapiTS(server, TS_OPTIONS)));
+  await output('visitor-core/src/schema.d.ts', astToString(await openapiTS(widget, TS_OPTIONS)));
   const versions = await readPackageVersions();
   await output('../frontend/content/generated/packages.json', JSON.stringify(versions, null, 2) + '\n');
-  for (const locale of ['tr', 'en']) await output(`../frontend/content/generated/packages.${locale}.mdx`, renderPackagesTable(versions, locale));
+  for (const locale of ['tr', 'en']) {
+    await output(`../frontend/content/generated/packages.${locale}.mdx`, renderPackagesTable(versions, locale));
+    await output(`../frontend/content/generated/packages-mobile.${locale}.mdx`, renderMobilePackagesTable(versions, locale));
+  }
   await output('php/src/Endpoints.php', renderPhpEndpoints(parse(await readFile(new URL('../../backend/docs/public-api.yaml', import.meta.url), 'utf8'))));
   const input = join(temp, 'public-api.json');
   await writeFile(input, JSON.stringify(server));

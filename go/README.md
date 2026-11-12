@@ -54,7 +54,7 @@ errors, and persist/deduplicate `ClickFix-Webhook-Id` before side effects.
 `IdentityHash(identitySecret, userID)` supplies the widget's `user_hash`; send
 only the resulting hash to your authenticated browser client. For a user that
 belongs to a company use `IdentityCompanyHash(identitySecret, userID, companyID)`
-(`hex(HMAC-SHA256(secret, userID + "\n" + companyID))`, CF-206) and send
+(`hex(HMAC-SHA256(secret, userID + "\n" + companyID))`) and send
 `company: { id: companyID }` in `identify`: the widget then binds the user to that
 company and nobody can claim another one.
 

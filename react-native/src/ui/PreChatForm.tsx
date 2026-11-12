@@ -1,4 +1,4 @@
-// The widget's start form (CF-52 request forms) rendered natively: the
+// The widget's start form (request forms) rendered natively: the
 // field list comes from bootstrap.request_form; conditions hide fields the
 // same way the web widget does. Submit returns the values keyed by field
 // key, ready for `send({ form: { form_uuid, values } })`.

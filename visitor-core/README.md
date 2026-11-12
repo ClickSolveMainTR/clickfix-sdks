@@ -16,7 +16,7 @@ Full walkthrough: https://getclickfix.com/docs/integration-guide. Changes:
 
 | Mode | Credential | `baseURL` | Who |
 |---|---|---|---|
-| `browser` (default) | the page origin, checked against the widget's allowed sites; requests go through the app's same-origin BFF | `/api` | `@getclickfix/react-widget`, your own web UI |
+| `browser` (default) | the page origin, checked against the widget's allowed domains | `/api` on the ClickFix app itself or behind your own same-origin proxy; from your own domain the absolute `https://<app>/api` (CORS, no cookies) | `@getclickfix/react-widget`, your own web UI |
 | `app` | a **mobile app key** (`X-ClickFix-App-Key`) plus the app's package name (`X-ClickFix-App-Package`), created in Web widget → Advanced → Mobile apps | absolute, `https://<app>/api` | React Native / native SDKs |
 
 Everything after that is the same: the visitor token, `identify` with a
@@ -25,6 +25,13 @@ mode is for native code only: the API rejects an app key that arrives with
 an `Origin`/`Referer`, and the headers are not CORS-allowed, so a page (or a
 webview) cannot use a key; a webview continues the session over the bridge
 instead.
+
+**Which host.** `baseURL` is always the ClickFix **app** origin plus `/api`:
+the origin that serves `widget.js` and `widget-embed.html` (for the hosted
+service `https://getclickfix.com/api`, for a self-hosted install your own app
+URL). The public server API host (`https://api.getclickfix.com`, `/v1/public-api/*`)
+is a different surface for server-side API keys (`@getclickfix/node`, Go, PHP)
+and does not serve the visitor routes; never put a server API key in an app.
 
 ```ts
 import { createVisitorClient, createRealtime } from '@getclickfix/visitor-core';
@@ -40,12 +47,12 @@ const client = createVisitorClient({
   language: 'tr',
 });
 await client.init();
-// user_hash from your server signs user_id and company.id together (CF-206):
+// user_hash from your server signs user_id and company.id together:
 // hex(HMAC-SHA256(secret, '1001' + '\n' + 'F-77')); without a company, user_id alone.
 await client.identify({ user_id: '1001', user_hash: fromYourServer, company: { id: 'F-77' } });
 client.track('viewed_order', { id: 42 });           // rides with the next message
 const { items } = await client.conversations();
-await client.sendMessage(items[0].uuid, { text: 'Merhaba' }, { uri, name: 'photo.jpg', type: 'image/jpeg' });
+await client.sendMessage(items[0].uuid, { text: 'Hello' }, { uri, name: 'photo.jpg', type: 'image/jpeg' });
 
 const realtime = createRealtime({
   tokens: () => client.realtimeToken(),
@@ -76,7 +83,17 @@ The package exports the `postMessage` contract of the hosted widget page
 (`docs/webview-bridge.md`): `BridgeCommand`, `BridgeMessage`,
 `encodeCommand`, `commandScript` (the `injectJavaScript` snippet),
 `parseMessage` (ignores anything that is not a widget message) and
-`isSafeLink` (only `https:` links may leave the webview). Hand a native
+`isSafeLink` (only `https:` links may leave the webview). `clickfix:event`
+messages are typed per event (`BridgeEventMap`, `EVENT_NAMES`): narrow on the
+name and the payload follows,
+
+```ts
+const m = parseMessage(event.nativeEvent.data);
+if (m?.type === 'clickfix:event' && m.event === 'unread') setBadge(m.payload.count);
+if (m?.type === 'clickfix:event' && m.event === 'identify' && !m.payload.company_verified) report();
+```
+
+An event name this version does not know is ignored like foreign traffic. Hand a native
 session to the webview with `{ type: 'clickfix:session', token: client.getToken() }`;
 the widget answers `clickfix:session` with its own token after `ready`,
 `identify` and `reset`, which `client.adoptToken(token)` continues natively.

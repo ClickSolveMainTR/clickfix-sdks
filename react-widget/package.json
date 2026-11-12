@@ -1,6 +1,6 @@
 {
   "name": "@getclickfix/react-widget",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "ClickFix web widget for React: typed hooks around widget.js and a UI-free visitor client for your own support UI.",
   "keywords": [
     "clickfix",

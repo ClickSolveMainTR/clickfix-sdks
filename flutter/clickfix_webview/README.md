@@ -19,7 +19,7 @@ Changes: [CHANGELOG.md](CHANGELOG.md).
 flutter pub add clickfix_webview
 ```
 
-Requires Flutter 3.38+ / Dart 3.10+. The package depends on `webview_flutter`
+Requires a Flutter release whose bundled Dart is a stable 3.10.0 or newer (the package sets only the Dart constraint `^3.10.0`). The package depends on `webview_flutter`
 (Android `minSdk` 24, iOS 12+). Opening external links needs a launcher of your
 choice (`url_launcher` in the example); the package only validates them. A
 complete app lives in

@@ -54,3 +54,22 @@ const chat:ChatScreenProps={conversation:null,pickFile:async()=>({uri:'file:///a
 const noConversation:ChatScreenProps={};void noConversation;
 const theme:ClickFixTheme['colors']['primary']='#000';void theme;
 const m:Message['direction']='in';void m;
+// Contact upsert by your user id: ContactInput plus a required external_id (was ContactInput & Record<string, never>).
+void api.request('/v1/public-api/contacts/by-external-id','put',{external_id:'1001',name:'Ada',email:'ada@example.test'},{idempotencyKey:'u-1001'});
+// @ts-expect-error external_id is required for the upsert
+void api.request('/v1/public-api/contacts/by-external-id','put',{name:'Ada'},{idempotencyKey:'u-1001'});
+// Company events: source is optional (the API defaults it to "api").
+void api.request('/v1/public-api/company-events','post',{external_id:'F-77',name:'seat_limit_reached'},{idempotencyKey:'e-1'});
+// sdk('reset') resolves like sdk.reset() (was typed void).
+const resetting:Promise<void>=sdk('reset');void resetting;
+const resetMethod:Promise<void>=sdk.reset();void resetMethod;
+// Headless client on your own domain: the ClickFix app origin, not a same-origin proxy.
+const crossOrigin=createWidgetClient({publicId:'id',appOrigin:'https://app.example.test'});void crossOrigin;
+// Bridge events carry typed payloads (were unknown); narrowing on the event name gives the payload.
+import { parseMessage as rnParseMessage, commandScript as rnCommandScript } from '../react-native/dist/index.js';
+const ev=parseMessage('{"type":"clickfix:event","event":"unread","payload":{"count":2}}');
+if(ev?.type==='clickfix:event'&&ev.event==='unread'){const n:number=ev.payload.count;void n;}
+if(ev?.type==='clickfix:event'&&ev.event==='identify'){const ok:boolean=ev.payload.company_verified;void ok;}
+// @ts-expect-error payload fields are typed per event
+if(ev?.type==='clickfix:event'&&ev.event==='unread'){const s:string=ev.payload.count;void s;}
+void rnParseMessage;void rnCommandScript({type:'clickfix:session',token:'t'});

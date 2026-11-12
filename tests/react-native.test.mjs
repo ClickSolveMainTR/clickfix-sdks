@@ -1,4 +1,4 @@
-// @getclickfix/react-native and @getclickfix/expo (CF-202): what the Node
+// @getclickfix/react-native and @getclickfix/expo: what the Node
 // test runner can check without a React Native runtime. The hooks and
 // screens themselves run under jest (react-native preset): `pnpm test:native`.
 import {test} from 'node:test';
@@ -47,17 +47,4 @@ test('react-native: only react, react-native and the optional keychain are peers
  // The core's app mode is the only transport: no fetch of our own, no Origin.
  const provider=await readFile(new URL('../react-native/dist/provider.js',import.meta.url),'utf8');
  assert.match(provider,/mode: 'app'/);assert.ok(!/Origin/.test(provider));
-});
-
-test('react-native: the example app targets Expo 58 / React Native 0.88 with the workspace packages',async()=>{
- const ex=JSON.parse(await readFile(new URL('../examples/react-native/package.json',import.meta.url),'utf8'));
- assert.equal(ex.private,true);assert.match(ex.dependencies.expo,/^~58\./);assert.match(ex.dependencies['react-native'],/^0\.88\./);
- assert.equal(ex.dependencies['@getclickfix/expo'],'workspace:*');
- const app=JSON.parse(await readFile(new URL('../examples/react-native/app.json',import.meta.url),'utf8'));
- assert.equal(app.expo.ios.bundleIdentifier,app.expo.android.package,'one package name for the mobile app key');
- assert.ok(app.expo.scheme,'a scheme for deep links');
- const src=await readFile(new URL('../examples/react-native/App.tsx',import.meta.url),'utf8');
- for (const api of ['ClickFixExpoProvider','useExpoDeepLinkConversation','ConversationListScreen','ChatScreen','identify','getUserHash'])assert.ok(src.includes(api),`App.tsx uses ${api}`);
- const server=await readFile(new URL('../examples/react-native/server.mjs',import.meta.url),'utf8');
- assert.match(server,/createHmac\('sha256', secret\)\.update\(companyId \? `\$\{userId\}\\n\$\{companyId\}` : userId\)\.digest\('hex'\)/,'server.mjs signs user_hash with the CF-206 formula');
 });

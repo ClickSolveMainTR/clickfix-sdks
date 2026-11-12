@@ -1,4 +1,4 @@
-// Deep links (CF-202): open the app on one conversation. Accepted shapes,
+// Deep links: open the app on one conversation. Accepted shapes,
 // with any scheme or host:
 //   https://app.example.com/support?conversation=<uuid>
 //   myapp://support/conversation/<uuid>      myapp://conversations/<uuid>

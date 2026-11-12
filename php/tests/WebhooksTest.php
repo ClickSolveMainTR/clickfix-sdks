@@ -35,9 +35,18 @@ final class WebhooksTest extends TestCase
     public function testCrossSdkVectors(): void
     {
         self::assertSame('534aa0f56b16209739c72164206ae5b141ba705b9f5cffcf7e7b724022c720d7', UserHash::make('example-identity-secret', '1001'));
+        self::assertSame('095ea961e7eef82f47f4e874bd8084bd7344ed49802e525768ab2c63b9a15c1c', UserHash::make('example-identity-secret', '1001', 'F-77'));
+        self::assertSame(UserHash::make('example-identity-secret', '1001', 'F-77'), UserHash::forCompany('example-identity-secret', '1001', 'F-77'));
+        self::assertSame(UserHash::make('example-identity-secret', '1001'), UserHash::make('example-identity-secret', '1001', ''), 'empty company id signs the user id alone');
         $body = '{"id":"evt-1","event":"conversation.created"}';
         self::assertSame('v1=764d18bbe573e4a03a9fd8d8f8e21b55e4a7abe799e6bdb28d2598e8124fd31d', Webhooks::sign('whsec_example_stored_secret', '1700000000', $body));
         self::assertTrue(Webhooks::verify('whsec_example_stored_secret', '1700000000', 'v1=764d18bbe573e4a03a9fd8d8f8e21b55e4a7abe799e6bdb28d2598e8124fd31d', $body, 1700000100));
         self::assertSame('sha256=40043654ab9bdbba3965ccfd698c8dc745747333954275cb2135e14691f4ba65', \ClickFix\ApiChannel::signature('example-channel-secret', '1700000000', '{"id":"msg-1","sender_id":"1001","text":"Merhaba"}'));
+    }
+
+    public function testCompanyHashRejectsLineBreaks(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        UserHash::forCompany('example-identity-secret', "1001\n", 'F-77');
     }
 }

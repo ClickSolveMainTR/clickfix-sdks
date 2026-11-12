@@ -14,7 +14,7 @@ use ClickFix\Client;
 $client = new Client('https://api.getclickfix.com', getenv('CLICKFIX_API_KEY'));
 
 $contact = $client->contacts()->upsertByExternalId('1001', [
-    'name' => 'Ayşe Yılmaz',
+    'name' => 'Ada Lovelace',
     'email' => 'ayse@example.com',
 ], idempotencyKey: 'user-1001-sync-42');
 

@@ -134,7 +134,7 @@ func IdentityHash(secret, userID string) string {
 // IdentityCompanyHash is the widget user_hash of a user id together with
 // the company's id in your system (sent to identify as company.id):
 // hex(HMAC-SHA256(secret, userID + "\n" + companyID)), so a signed-in user
-// cannot claim another company (CF-206). With an empty companyID it equals
+// cannot claim another company. With an empty companyID it equals
 // IdentityHash. The ids are separated by a newline inside the signed bytes,
 // so an id that contains a line break cannot be signed: the result is then
 // "" (which the widget API never accepts), as the Node helper throws.
@@ -185,8 +185,36 @@ func Iterate[T any](ctx context.Context, fetch func(context.Context, int, int) (
 	}
 }
 
+// DecodeData decodes the data member of a generic response envelope into T.
+// Several list and detail responses are typed IntegrationEnvelope with an
+// untyped Data; DecodeData gives them a concrete type without a hand-written
+// envelope, for example
+//
+//	res, _ := sdk.GetV1PublicApiCompaniesWithResponse(ctx, params)
+//	page, err := clickfix.DecodeData[clickfix.Page[MyCompany]](res.JSON200)
+//
+// A nil envelope (the response was not a 200) is an error.
+func DecodeData[T any](env *IntegrationEnvelope) (T, error) {
+	var out T
+	if env == nil {
+		return out, errors.New("clickfix: no response envelope")
+	}
+	raw, err := json.Marshal(env.Data)
+	if err != nil {
+		return out, err
+	}
+	err = json.Unmarshal(raw, &out)
+	return out, err
+}
+
 // ListPage decodes the standard envelope. resource is restricted to list endpoints.
 func ListPage[T any](ctx context.Context, c *SDK, resource string, limit, offset int) (Page[T], error) {
+	return ListPageQuery[T](ctx, c, resource, limit, offset, nil)
+}
+
+// ListPageQuery is ListPage with extra query parameters (filters such as
+// external_id or q); limit and offset always come from the arguments.
+func ListPageQuery[T any](ctx context.Context, c *SDK, resource string, limit, offset int, query url.Values) (Page[T], error) {
 	var out Page[T]
 	if resource != "contacts" && resource != "companies" && resource != "conversations" && resource != "webhooks" {
 		return out, errors.New("clickfix: unsupported list")
@@ -197,6 +225,9 @@ func ListPage[T any](ctx context.Context, c *SDK, resource string, limit, offset
 	}
 	u.Path = strings.TrimRight(u.Path, "/") + "/v1/public-api/" + resource
 	q := u.Query()
+	for k, v := range query {
+		q[k] = append([]string(nil), v...)
+	}
 	q.Set("limit", strconv.Itoa(limit))
 	q.Set("offset", strconv.Itoa(offset))
 	u.RawQuery = q.Encode()

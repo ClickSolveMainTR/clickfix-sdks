@@ -151,7 +151,7 @@ class ClickFixCompany {
 
   /// Company id in your system (the company's external id). It binds the
   /// user to the company only when [ClickFixIdentity.userHash] signs it
-  /// together with the user id (bridge contract 1.2, CF-206); an unsigned
+  /// together with the user id (bridge contract 1.2); an unsigned
   /// id is ignored and [name] / [domain] stay hints.
   final String? id;
 
@@ -175,7 +175,7 @@ class ClickFixCompany {
 /// app. Without a company it is `hex(HMAC-SHA256(identity secret, userId))`;
 /// with [company] carrying an id it is
 /// `hex(HMAC-SHA256(identity secret, userId + "\n" + company.id))`, so
-/// the user cannot claim another company (CF-206). Neither id may contain
+/// the user cannot claim another company. Neither id may contain
 /// a line break.
 class ClickFixIdentity {
   /// Creates an identity. [userId] (1–200 chars) and [userHash] (1–128 chars)
