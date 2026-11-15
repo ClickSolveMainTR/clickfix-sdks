@@ -754,6 +754,8 @@ export interface components {
             conversations: components["schemas"]["WidgetConversation"][];
             /** @description Start form of a new conversation; null when none is offered. */
             request_form?: components["schemas"]["PublicRequestForm"] | null;
+            /** @description Departments the visitor may pick for a new conversation; empty hides the picker and the AI routes the first message. */
+            departments?: components["schemas"]["WidgetDepartment"][];
         };
         WidgetBootstrapContext: {
             visible: boolean;
@@ -1063,6 +1065,13 @@ export interface components {
             /** @description Compared value; a list for `in` */
             value?: unknown;
         };
+        WidgetDepartment: {
+            /** Format: uuid */
+            uuid: string;
+            name: string;
+            description: string;
+            color: string;
+        };
         WidgetIdentifyInput: {
             /** @description The user's id in your system (the contact's external id); no line breaks */
             user_id: string;
@@ -1135,6 +1144,11 @@ export interface components {
              * @enum {string}
              */
             intent?: "" | "human" | "callback" | "video";
+            /**
+             * Format: uuid
+             * @description Department the visitor picked for a new conversation; one of bootstrap `departments`
+             */
+            department_uuid?: string;
             /** @description SDK attributes set before the contact existed */
             attributes?: {
                 [key: string]: unknown;
@@ -1165,6 +1179,8 @@ export interface components {
             /** @enum {string} */
             consent?: "true" | "false";
             intent?: string;
+            /** Format: uuid */
+            department_uuid?: string;
             phone?: string;
             text?: string;
             /** Format: uuid */
