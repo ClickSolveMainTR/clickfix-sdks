@@ -244,6 +244,17 @@ export function useConversation(initial: string | null, options: ConversationOpt
       if (event.typing) typingTimer.current = setTimeout(() => setAgentTyping(false), 8000);
       return;
     }
+    // An agent corrected a reply: replace its text in place (polling only
+    // fetches newer messages).
+    if (event.type === 'message.edited') {
+      const id = event.message_uuid;
+      const text = event.text;
+      if (typeof id === 'string' && typeof text === 'string') {
+        const at = typeof event.edited_at === 'string' ? event.edited_at : new Date().toISOString();
+        setMessages((prev) => prev.map((m) => (m.uuid === id ? { ...m, content: text, edited_at: at } : m)));
+      }
+      return;
+    }
     if (['message.created', 'conversation.updated', 'app.foreground'].includes(event.type)) void refresh();
   });
 

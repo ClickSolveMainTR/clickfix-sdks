@@ -1,0 +1,25 @@
+name: clickfix_visitor
+description: >-
+  Native Dart client of the ClickFix visitor (widget) API for Flutter and Dart
+  apps: visitor session with a mobile app key, identify, conversations,
+  messages, files and polling. Generated from the OpenAPI contract; no UI.
+version: 0.1.0
+repository: https://github.com/ClickSolveMainTR/clickfix-sdks/tree/main/flutter/clickfix_visitor
+issue_tracker: https://github.com/ClickSolveMainTR/clickfix-sdks/issues
+documentation: https://getclickfix.com/docs/integration-guide/mobile
+topics:
+  - clickfix
+  - support
+  - chat
+  - api-client
+
+environment:
+  sdk: ^3.10.0
+
+dependencies:
+  http: ^1.5.0
+  http_parser: ^4.1.0
+
+dev_dependencies:
+  lints: ^6.0.0
+  test: ^1.26.0

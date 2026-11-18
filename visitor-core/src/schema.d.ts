@@ -1220,6 +1220,11 @@ export interface components {
             created_at: string;
             /** Format: date-time */
             read_at: string | null;
+            /**
+             * Format: date-time
+             * @description An agent corrected the reply; content is the corrected text
+             */
+            edited_at?: string | null;
         };
         WidgetAttachment: {
             /** Format: uuid */

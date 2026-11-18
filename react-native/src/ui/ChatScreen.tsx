@@ -139,6 +139,7 @@ export function ChatScreen(props: ChatScreenProps) {
                     📎 {a.filename}
                   </Text>
                 ))}
+                {item.edited_at ? <Text style={[styles.edited, mine ? styles.textMine : styles.textTheirs]}>{labels.edited}</Text> : null}
               </View>
             </View>
           );
@@ -211,6 +212,7 @@ const makeStyles = (t: ClickFixTheme) =>
     textTheirs: { color: t.colors.onBubbleIn },
     sender: { color: t.colors.muted, fontSize: t.fontSize - 4, marginBottom: 2, fontFamily: t.fontFamily },
     attachment: { fontSize: t.fontSize - 2, marginTop: 4, textDecorationLine: 'underline', fontFamily: t.fontFamily },
+    edited: { fontSize: t.fontSize - 3, marginTop: 2, fontStyle: 'italic', opacity: 0.7, fontFamily: t.fontFamily },
     typing: { color: t.colors.muted, fontSize: t.fontSize - 3, marginBottom: 6, fontFamily: t.fontFamily },
     spinner: { marginVertical: t.spacing },
     link: { color: t.colors.primary, fontSize: t.fontSize - 2, textAlign: 'center', marginVertical: t.spacing / 2, fontFamily: t.fontFamily },

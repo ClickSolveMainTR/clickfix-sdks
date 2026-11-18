@@ -7,6 +7,7 @@ import { parse } from 'yaml';
 import openapiTS, { astToString } from 'openapi-typescript';
 import { buildPublicSpec, scrub } from './public-api.mjs';
 import { renderPhpEndpoints } from './php-endpoints.mjs';
+import { renderDartClient } from './dart-client.mjs';
 import { readPackageVersions, renderPackagesTable, renderMobilePackagesTable } from './package-versions.mjs';
 const root = new URL('../', import.meta.url);
 const spec = parse(await readFile(new URL('../../backend/docs/openapi.yaml', import.meta.url), 'utf8'));
@@ -50,6 +51,9 @@ try {
   const widget = subset(p => p.startsWith('/v1/widget/'));
   await output('node/src/schema.d.ts', astToString(await openapiTS(server, TS_OPTIONS)));
   await output('visitor-core/src/schema.d.ts', astToString(await openapiTS(widget, TS_OPTIONS)));
+  const dart = renderDartClient(widget);
+  await output('flutter/clickfix_visitor/lib/src/generated/models.dart', dart.models);
+  await output('flutter/clickfix_visitor/lib/src/generated/api.dart', dart.api);
   const versions = await readPackageVersions();
   await output('../frontend/content/generated/packages.json', JSON.stringify(versions, null, 2) + '\n');
   for (const locale of ['tr', 'en']) {

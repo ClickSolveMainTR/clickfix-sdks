@@ -5,7 +5,7 @@ export type ClickFixStatus = 'idle' | 'loading' | 'ready' | 'error';
 
 /**
  * One push on the visitor's realtime channel (`message.created`,
- * `conversation.updated`, `typing`, ...) or the synthetic `app.foreground`
+ * `message.edited`, `conversation.updated`, `typing`, ...) or the synthetic `app.foreground`
  * the provider emits when the app returns to the foreground.
  */
 export interface RealtimeEvent {

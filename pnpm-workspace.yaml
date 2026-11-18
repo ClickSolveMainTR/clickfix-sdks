@@ -10,3 +10,10 @@ overrides:
   "minimatch@>=7.0.0 <11.0.1": "^11.0.1"
   "glob@>=9.0.0 <=14.0.1": "^14.0.2"
   "@babel/core@<7.29.6": "^7.29.6"
+
+# GHSA-fc5q-39xc-vjpf (picomatch <=4.0.7, ReDoS via repeated extglobs): no patched
+# release on npm yet (latest is 4.0.7). picomatch only sees glob patterns from build
+# tooling, never user input. Remove this entry and add an override once 4.0.8 ships.
+auditConfig:
+  ignoreGhsas:
+    - GHSA-fc5q-39xc-vjpf

@@ -96,6 +96,8 @@ export interface ClickFixLabels {
   yes: string;
   no: string;
   you: string;
+  /** Under a reply an agent corrected. */
+  edited: string;
 }
 
 export const labelsEn: ClickFixLabels = {
@@ -122,6 +124,7 @@ export const labelsEn: ClickFixLabels = {
   yes: 'Yes',
   no: 'No',
   you: 'You',
+  edited: 'edited',
 };
 
 export const labelsTr: ClickFixLabels = {
@@ -148,6 +151,7 @@ export const labelsTr: ClickFixLabels = {
   yes: 'Evet',
   no: 'Hayır',
   you: 'Siz',
+  edited: 'düzenlendi',
 };
 
 export interface ClickFixUIContextValue {
